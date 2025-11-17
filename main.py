@@ -1,6 +1,7 @@
 import os
 import shutil
 import sys, tty, termios
+import time
 
 def getch():
     fd = sys.stdin.fileno()
@@ -14,144 +15,304 @@ def getch():
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
+
+def slow_print(text, delay=0.04):
+    for line in text.split("\n"):
+        print(line)
+        time.sleep(delay)
+
+# ---------------------------------------------------------------------
+# BOOT SEQUENCE (retro terminal style)
+# ---------------------------------------------------------------------
+clear()
+slow_print("MAGICAL TERMINAL SYSTEM v2.3 — MINISTRY OF MAGIC", 0.03)
+slow_print("COPYRIGHT (C) 1984 — ALL RIGHTS RESERVED\n", 0.03)
+time.sleep(0.5)
+
+slow_print("INITIALIZING...", 0.05)
+time.sleep(0.4)
+slow_print("LOADING SPELL MODULES... OK", 0.05)
+slow_print("CHECKING OWL POST CONNECTION... OK", 0.05)
+slow_print("PREPARING USER INTERFACE... OK", 0.05)
+slow_print("\nSYSTEM READY.\n", 0.04)
+input("Press [ENTER] to begin... ")
 clear()
 
-print("What is your first name?")
-fname = input("↪ ")
+# ---------------------------------------------------------------------
+# PLAYER SETUP
+# ---------------------------------------------------------------------
 
-print("What is your last name?")
-lname = input("↪ ")
+slow_print("PLEASE ENTER YOUR FIRST NAME")
+fname = input("> ")
+
+slow_print("\nPLEASE ENTER YOUR LAST NAME")
+lname = input("> ")
 
 clear()
 
 name = fname + " " + lname
+
 def pronoun_choice():
-    print("""
-    What are your pronouns?
-    1. She/Her
-    2. He/Him
-    3. They/Them
-    (Enter number)
-    """)
+    slow_print("""
+SELECT PRONOUNS
+    (1) SHE / HER
+    (2) HE / HIM
+    (3) THEY / THEM
+
+> """)
     return getch()
 
+slow_print("LOADING USER PROFILE...\n")
+time.sleep(0.6)
 clear()
 
 pronouns_choice = pronoun_choice()
 
 if pronouns_choice == "1":
     pronouns = "Ms. "
-
 elif pronouns_choice == "2":
     pronouns = "Mr. "
-
 elif pronouns_choice == "3":
     pronouns = "Mx. "
-
 else:
     pronoun_choice()
 
 clear()
 
-columns = shutil.get_terminal_size().columns
-
-print("⠀⠀⠀⢀⠀⢀⣀⡀⢠⠤⠄⢤⢠⠀⡄⡠⡄⠠⡤⣄⣀⠀⡀⠀⠀⠀".center(columns))
-print("⠀⠀⢰⣈⢧⢺⣀⡹⠸⠤⠇⠸⠃⠛⠴⠏⠹⢠⡛⣇⢁⡏⢱⡲⠀⠀".center(columns))
-print("⠀⠀⠀⠗⠈⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠀⠉⠓⠋⠀⠀".center(columns))
-print("⠀⠀⠈⠀⠀⢀⠤⠄⡀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠠⠤⡀⠀⠀⠁⠀⠀".center(columns))
-print("⠠⠀⠀⠀⠐⠁⢀⣄⠀⠁⠠⠀⠀⠀⠀⠄⣈⣀⡀⠀⠈⠂⠀⠀⠀⠄".center(columns))
-print("⠀⠀⠀⠈⠂⢄⠹⣿⢰⣿⣷⡄⠈⠁⠼⠟⠉⣹⡇⠀⡠⠐⠁⠀⠀⠀".center(columns))
-print("⠀⠀⠀⠀⠀⠀⠆⡎⢸⣿⣿⠴⠒⠈⣠⡶⠟⠉⠀⠰⠀⠀⠀⠀⠀⠀".center(columns))
-print("⠀⠀⠀⠀⠀⠀⡄⠹⣿⡟⠋⣑⠂⢐⣋⠁⣤⣾⣿⢧⠀⠀⠀⠀⠀⠀".center(columns))
-print("⠀⠀⠀⠀⠀⢠⣀⣯⣹⣄⡆⢸⠤⠼⡇⢰⣙⣻⣟⣀⡄⠀⠀⠀⠀⠀".center(columns))
-print("⠀⠀⠀⠀⡠⠁⣴⣶⣦⠄⠁⠸⠄⠠⠇⠈⣺⣿⣄⣸⣿⣄⠀⠀⠀⠀".center(columns))
-print("⠀⠀⡀⠊⠈⣧⣿⣿⣶⣤⡁⠀⠀⠀⣶⣾⣿⣿⣿⣿⣿⡇⠁⢀⠀⠀".center(columns))
-print("⠀⠀⠀⢄⠀⢠⡿⠛⢿⣿⣿⡆⠀⠀⣿⣿⣿⣿⡟⠻⢿⡿⡠⠀⠀⠀".center(columns))
-print("⠀⠀⠀⠀⠁⣀⠤⠙⢛⣽⠟⠓⠀⠀⢻⡟⢸⠉⣧⠤⣀⠈⠀⠀⠀⠀".center(columns))
-print("⠀⠀⠀⠀⠀⠀⠀⠀⠁⠂⠄⡀⠀⠀⢈⠠⠘⠉⠀⠀⠀⠀⠀⠀⠀⠀".center(columns))
-print("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢄⡠⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀".center(columns))
-
-
-input("Press [ENTER] to start...")
-
-text1 = "HOGWARTS SCHOOL of WITCHCRAFT and WIZARDRY"
-text2 = "Headmaster: Albus Dumbledore"
-text3 = "(Order of Merlin, First Class, Grand Sorc., Chf. Warlock,"
-text4 = "Supreme Mugwump, International Confed. of Wizards)"
-
-text5 = "PARENTS ARE REMINDED THAT FIRST YEARS"
-text6 = "ARE NOT ALLOWED THEIR OWN BROOMSTICK"
+# ---------------------------------------------------------------------
+# OWL ARRIVAL + ART
+# ---------------------------------------------------------------------
 
 columns = shutil.get_terminal_size().columns
 
-print("As you walk to your front door, an owl swoops down and drops a letter at your feet.")
-print("""
-    1. Ignore the letter
-    2. Pick up the letter
+slow_print("AN OWL APPROACHES WITH UNUSUAL SPEED...\n", 0.04)
+
+owl_art = [
+"⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠒⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+"⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+"⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠛⠀⠀⠀⠀⠀⣼⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+"⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠀⠀⠀⠀⠀⠠⣿⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+"⠀⠀⠀⠀⠀⠀⠀⠀⢀⣿⣇⠀⠀⠀⣷⠈⣿⣿⡇⢠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+"⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⠀⢨⣿⡀⣿⣿⡇⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+"⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⡆⠀⢸⣿⣇⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+"⠀⢠⠀⠀⠀⠀⠀⠀⣿⣿⣿⠁⠀⢸⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+"⠀⣾⡄⠀⠀⠀⠀⠀⣿⣿⣿⡆⠀⢸⣿⣿⣿⣿⣿⣿⡇⠀⢀⣦⠀⠀⠀⠀⠀⠀",
+"⢰⣿⡇⢰⡆⠀⢀⣀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣾⣾⣿⠀⠀⠀⠰⠆⠀",
+"⣸⡿⣇⣸⣟⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀"
+]
+
+for line in owl_art:
+    slow_print(line.center(columns), 0.02)
+
+slow_print("\nTHE OWL DROPS A LETTER AT YOUR FEET.\n")
+slow_print("""
+    (1) IGNORE THE LETTER
+    (2) PICK UP THE LETTER
+
+> 
 """)
 char = getch()
+
+clear()
+
 if char == "1":
-    pass
-if char == "2":
-    pass
+    slow_print("As you open the door, a letter slides under it with a soft *hoot*.\n")
+    while True:
+        slow_print("""
+    (1) IGNORE THE LETTER
+    (2) PICK UP THE LETTER
 
-input("Press [ENTER] to pick up the letter...")
-print("The letter is sealed with a red wax stamp bearing a lion, a serpent, a badger, and an eagle surrounding a large letter 'H'.")
-input("Press [ENTER] to break the seal and open the letter...")
-print("You unfold the letter and read:")
+> """)
+        sel = getch()
+        clear()
+        if sel == "1":
+            slow_print("Another letter slides under the door, adding to the pile.\n")
+        if sel == "2":
+            break
 
-print(text1.center(columns))
-print(text2.center(columns))
-print(text3.center(columns))
-print(text4.center(columns))
-print(f"""
-Dear {pronouns} {lname},
-We are pleased to inform you that you have been accepted at Hogwarts School of Witchcraft and Wizardry. Please find enclosed a list of all necessary books and equipment.
+clear()
+
+# ---------------------------------------------------------------------
+# LETTER SEAL + CONTENT
+# ---------------------------------------------------------------------
+
+slow_print("The letter is sealed with a red wax stamp bearing four creatures and a large 'H'.\n")
+input("Press [ENTER] to break the seal... ")
+clear()
+
+slow_print("You unfold the letter and read:\n")
+
+slow_print("HOGWARTS SCHOOL of WITCHCRAFT and WIZARDRY".center(columns))
+slow_print("Headmaster: Albus Dumbledore".center(columns))
+slow_print("(Order of Merlin, First Class, Grand Sorc., Chf. Warlock,".center(columns))
+slow_print("Supreme Mugwump, International Confed. of Wizards)".center(columns))
+
+slow_print(f"""
+Dear {pronouns}{lname},
+
+We are pleased to inform you that you have been accepted at Hogwarts School of
+Witchcraft and Wizardry. Please find enclosed a list of all necessary books
+and equipment.
+
 Term begins on 1 September. We await your owl by no later than 31 July.
 
 Yours sincerely,
 Minerva McGonagall
-
 Deputy Headmistress
 """)
-input("Press [ENTER] to flip the page...")
-print("""
-UNIFORM
 
-First-year students will require:
-    1. Three sets of plain work robes (black)
-    2. One plain pointed hat (black) for day wear
-    3. One pair of protective gloves (dragon hide or similar)
-    4. One winter cloak (black, with silver fastenings)
-Please note that all pupil's clothes should carry name tags.
+input("Press [ENTER] to view the supply list... ")
+clear()
+
+slow_print("""
+UNIFORM
+-------
+(1) Three sets of plain work robes (black)
+(2) One plain pointed hat (black)
+(3) Gloves (dragon hide or similar)
+(4) One winter cloak (black, silver fastenings)
+All clothing must be labeled with student's name.
 
 COURSE BOOKS
+------------
+A copy of each of the following:
+- The Standard Book of Spells (Grade 1)
+- A History of Magic
+- Magical Theory
+- A Beginner's Guide to Transfiguration
+- One Thousand Magical Herbs and Fungi
+- Magical Drafts and Potions
+- Fantastic Beasts and Where to Find Them
+- The Dark Forces: A Guide to Self-Protection
 
-All students should have a copy of each of the following:
-
-    1. The Standard Book of Spells (Grade 1) by Miranda Goshawk
-    2. A History of Magic by Bathilda Bagshot
-    3. Magical Theory by Adalbert Waffling
-    4. A Beginner's Guide to Transfiguration by Emeric Switch
-    5. One Thousand Magical Herbs and Fungi by Phyllida Spore
-    6. Magical Drafts and Potions by Arsenius Jigger
-    7. Fantastic Beasts and Where to Find Them by Newt Scamander
-    8. The Dark Forces: A Guide to Self-Protection by Quentin Trimble
-      
 OTHER EQUIPMENT
-    1 wand
-    1 cauldron (pewter, standard size 2)
-    1 set glass or crystal phials
-    1 telescope
-    1 set brass scales
-Students may also bring, if they desire, an owl OR a cat OR a toad.
-      """)
-print(text5.center(columns))
-print(text6.center(columns))
-print("""
+---------------
+1 wand
+1 cauldron (pewter, standard size 2)
+1 set phials (glass or crystal)
+1 telescope
+1 set brass scales
 
-Yours sincerely,
+Students may bring an owl OR a cat OR a toad.
+""")
 
-Lucinda Thomsonicle-Pocus
-Chief Attendant of Witchcraft Provisions
+slow_print("PARENTS ARE REMINDED THAT FIRST YEARS".center(columns))
+slow_print("ARE NOT ALLOWED THEIR OWN BROOMSTICK".center(columns))
+
+input("\nPress [ENTER] to continue... ")
+clear()
+
+# ---------------------------------------------------------------------
+# KNOCK AT THE DOOR
+# ---------------------------------------------------------------------
+
+while True:
+    slow_print("""
+THERE IS A HEAVY KNOCK AT YOUR DOOR.
+
+    (1) OPEN THE DOOR
+    (2) IGNORE IT
+
+> """)
+    sel = getch()
+    clear()
+
+    if sel == "1":
+        slow_print("""
+A very large man with a wild beard ducks inside.
+
+"Ah! There yeh are," he says. "I've been sent ter guide yeh to Diagon Alley.
+Got yer Hogwarts letter, did yeh?"
+""")
+        break
+
+    if sel == "2":
+        slow_print("""
+Your door is blown off its hinges.
+
+A very large man with a wild beard steps through the dust.
+
+"Ah! There yeh are," he says. "I've been sent ter guide yeh to Diagon Alley.
+Got yer Hogwarts letter, did yeh?"
+""")
+        break
+
+# ---------------------------------------------------------------------
+# NEXT CHOICE
+# ---------------------------------------------------------------------
+
+while True:
+    slow_print("""
+    (1) GO WITH THE MAN
+    (2) STAY WHERE YOU ARE
+
+> """)
+    sel = getch()
+
+    if sel == "1":
+        clear()
+        slow_print("You follow the large man outside.\n")
+        break
+
+    if sel == "2":
+        clear()
+        slow_print("""
+You decide to stay where you are.
+
+The man sighs deeply. "Right. Stubborn one, eh?"
+
+Before you can react, he gently—but firmly—picks you up under one arm
+and starts walking toward the street.
+
+"Come on now. Diagon Alley won't wait all day."
+""")
+        break
+
+slow_print("""
+A giant blue motorcycle is parked outside. 
+The man props you up on the seat and settles in behind you.
+
+The engine growls like a dragon waking up.
+
+Before you can ask a single question, the bike lifts off the ground —
+slowly at first, then rising higher and higher.
+
+You, the large man, and the motorcycle are suddenly flying.
+""")
+slow_print("""
+              .
+               					
+              |					
+     .               /				
+      \       I     				
+                  /
+        \  ,g88R_
+          d888(`  ).                   _
+ -  --==  888(     ).=--           .+(`  )`.
+)         Y8P(       '`.          :(   .    )
+        .+(`(      .   )     .--  `.  (    ) )
+       ((    (..__.:'-'   .=(   )   ` _`  ) )
+`.     `(       ) )       (   .  )     (   )  ._
+  )      ` __.:'   )     (   (   ))     `-'.:(`  )
+)  )  ( )       --'       `- __.'         :(      ))
+.-'  (_.'          .')                    `(    )  ))
+                  (_  )                     ` __.:'
+                                        	
+--..,___.--,--'`,---..-.--+--.,,-,,..._.--..-._.-a:f--.
+""")
+slow_print("""
+The wind whips past your ears as the motorcycle climbs higher.
+
+The man pats your shoulder gently. 
+"Reckon I should introduce meself. Name’s Rubeus Hagrid."
+
+He gives a small, proud nod.
+
+"Keeper of Keys and Grounds at Hogwarts. 
+Dumbledore sent me ter fetch yeh. Figured yeh might need a bit o’ guidance
+gettin’ to Diagon Alley and all."
+""")
+input("\nPress [ENTER] to continue... ")
+slow_print("""
+The motocycle slows to a halt, landing safely on the ground. In front of you, you see a large 
 """)
