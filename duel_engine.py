@@ -281,8 +281,8 @@ def duel_prototype(name, player_spellbook):
     difficulty = 10 + max(0, 3 - advantage)
     return priori_incantatem_clash(difficulty)
 
-"""
+
 if __name__ == "__main__":
     result = duel_prototype("Draco Malfoy", PLAYER_SPELLBOOK)
     print("WIN" if result == "win" else "LOSE")
-"""
+

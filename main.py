@@ -315,6 +315,157 @@ gettin’ to Diagon Alley and all."
 """)
 input("\nPress [ENTER] to continue... ")
 slow_print("""
-The motocycle slows to a halt, landing safely on the ground. In front of you, you see a
-        
+The motorcycle slows to a halt, landing safely on the ground.
+
+In front of you, you see a narrow London street — ordinary at first glance — 
+until Hagrid leads you toward a dingy-looking pub squeezed between two shops.
+
+Above the door hangs a battered sign:
+
+            THE LEAKY CAULDRON
+
+Hagrid grins. "Right then. This way."
+
 """)
+
+input("Press [ENTER] to follow Hagrid inside... ")
+clear()
+
+# ---------------------------------------------------------------------
+# THE LEAKY CAULDRON
+# ---------------------------------------------------------------------
+
+slow_print("""
+You step into the Leaky Cauldron.
+
+The moment the door closes behind you, the noise of the street vanishes.
+The pub is dim, warm, and crowded with cloaked figures. A few turn and stare.
+""")
+
+slow_print("""
+A toothless old wizard waves cheerfully. 
+"Bless my soul — a first year!" he croaks.
+
+Hagrid gives him a polite nod and guides you toward the back of the pub.
+""")
+
+input("Press [ENTER] to continue... ")
+clear()
+
+# ---------------------------------------------------------------------
+# BRICK WALL ENTRY TO DIAGON ALLEY
+# ---------------------------------------------------------------------
+
+slow_print("""
+Hagrid leads you into a small courtyard.
+
+He begins tapping bricks on the wall with a pink umbrella.
+"Three up... two across..."
+
+Each tap makes the brick glow faintly.
+""", 0.04)
+
+time.sleep(0.5)
+slow_print("\nWith a rumble, the wall pulls apart — folding backward like a jagged doorway.\n")
+
+"""
+
+
+
+
+
+
+
+
+"""
+
+diagon_art = [
+"⠀⠀⢠⡤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⢤⠀⠀",
+"⠀⠀⣼⡜⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⢞⣇⠀",
+"⢀⡾⡍⠀⠀⠀⠀⠀⣦⠤⡀⢠⡄⠀⣄⠀⢀⠤⢤⠀⡠⢤⡀⣆⠀⣤⠀⠀⠀⡄⠀⣤⠀⠰⡄⠀⢠⡤⠆⢢⡀⡰⠀⠀⠀⠀⠀⢋⣧",
+"⢸⣷⠀⢀⠀⠀⠀⠀⣿⠀⣿⢸⡇⢀⢻⠀⣾⠀⣀⢼⠇⠀⡇⣿⠄⣯⠀⠀⠸⡇⠀⣻⠀⠀⡇⠀⢸⣇⡀⠀⣧⠃⠀⠀⠀⠀⡀⢸⢸",
+"⢸⡿⠀⠈⠀⠀⠀⠀⣿⠀⣿⢸⡇⠸⢼⡆⢿⠀⣿⢸⡆⠀⡇⣿⠰⡿⠀⠀⡦⣷⠀⣻⠀⠀⡇⠀⢸⡏⢁⠀⣽⠀⠀⠀⠀⠀⠁⢸⢸",
+"⠈⢷⣣⠀⠀⠀⠀⠀⠛⠒⠁⠘⠃⠄⠀⠣⠈⠂⠋⠀⠑⠚⠁⠛⠀⠘⠀⠐⠀⠘⠂⠛⠐⠰⠓⠚⠘⠃⠊⠀⠛⠀⠀⠀⠀⠀⢀⣬⡟",
+"⠀⠀⢻⢣⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⢮⠏⠀",
+"⠀⠀⠈⠓⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠚⠀⠀",
+]
+
+for line in diagon_art:
+    slow_print(line.center(shutil.get_terminal_size().columns), 0.02)
+
+slow_print("""
+Behind the opening lies a bustling wizarding street filled with owls, cauldrons, glittering shop windows,
+and more people than you’ve ever seen in one place.
+
+Hagrid beams. 
+"Welcome, {}. Welcome to Diagon Alley."
+""".format(name), 0.04)
+
+input("\nPress [ENTER] to step inside... ")
+clear()
+
+# ---------------------------------------------------------------------
+# DIAGON ALLEY HUB (player choice)
+# ---------------------------------------------------------------------
+
+while True:
+    slow_print("""
+You stand at the entrance of Diagon Alley.
+
+Where would you like to go first?
+
+    (1) Ollivanders — get your wand
+    (2) Gringotts — visit the wizard bank
+    (3) Madam Malkin's — school robes
+    (4) Flourish & Blotts — books
+    (5) Follow Hagrid — let him choose
+
+> """)
+    sel = getch()
+    clear()
+
+    if sel == "1":
+        slow_print("Hagrid nods. \"Good place to start. Every witch or wizard needs a wand.\"\n")
+        slow_print("You head toward a narrow shop with peeling gold letters: OLLIVANDERS.\n")
+        ollivander_art = [
+            "⣿⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⣿",
+            "⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡠⠤⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿",
+            "⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣠⡤⠶⠖⠂⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿",
+            "⣿⠀⠀⠀⠀⢀⡀⠤⠤⣀⡀⠀⢀⣀⣠⠤⠿⠛⠛⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿",
+            "⣿⠀⠀⡠⠊⢀⣀⠠⠄⠒⠋⢫⡉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿",
+            "⣿⠀⢶⠅⡨⠒⠀⠻⠁⠀⠀⠀⢿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿",
+            "⣿⠀⠀⢸⠁⠀⠀⠀⠀⠀⠀⠀⢸⡗⣦⠂⠀⢲⡔⠀⠐⢢⠒⣔⠀⠲⠀⢰⡄⠐⠦⡀⠐⠂⠲⠒⠢⡀⢒⠐⠢⠐⡒⠢⡄⢠⠒⠄⠀⣿",
+            "⣿⠀⠀⠸⡄⠀⠀⠀⠀⠀⠀⢀⣿⠁⣿⠀⢀⢸⡆⢀⡀⠤⠀⠸⡄⠁⢀⠁⢳⡀⡁⠘⢦⠀⢸⠀⢀⡟⢘⠀⢃⡀⡄⠲⡅⢠⠙⢲⠀⣿",
+            "⣿⠀⠀⠀⠹⣦⣀⠀⠀⣀⣤⠟⠁⠀⢈⡈⠀⢁⠀⠁⠀⠉⠀⠀⠁⠀⠁⠀⠀⠁⠈⠀⠀⠀⠁⠀⠁⠀⠈⠁⠀⢈⠁⠀⣈⣀⡁⠀⠀⣿",
+            "⣿⠀⠀⠀⠀⠀⠉⠉⠉⠉⠀⠀⠀⢰⠀⢹⣥⡞⣶⡖⡆⣶⡇⣦⢸⣴⡖⡆⠘⣼⢡⣦⣶⠀⣷⡄⡆⣶⡆⡆⢱⠃⠊⡎⡌⢣⠀⠀⠀⣿",
+            "⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠀⠀⠀⠀⠀⠀⠀⠀⣿",
+            "⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿",
+            "⣿⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣿",
+        ]
+        for line in ollivander_art:
+            slow_print(line.center(shutil.get_terminal_size().columns), 0.02)
+        # TODO: Add wand-selection sequence
+        break
+
+    elif sel == "2":
+        slow_print("Hagrid gestures toward a white marble building. \"Gringotts it is. Best do yer banking early.\"\n")
+        # TODO: Add Gringotts vault visit scene
+        break
+
+    elif sel == "3":
+        slow_print("Hagrid points to a shop draped in purple fabric. \"Madam Malkin's Robes for All Occasions.\"\n")
+        # TODO: Add robe-fitting scene
+        break
+
+    elif sel == "4":
+        slow_print("You make your way toward a towering bookstore. \"Flourish & Blotts,\" Hagrid reads. \"You'll need yer books.\"\n")
+        # TODO: Add bookshop scene
+        break
+
+    elif sel == "5":
+        slow_print("Hagrid chuckles. \"Right then, stick with me. I'll show yeh the important bits first.\"\n")
+        # TODO: Add guided tour sequence
+        break
+
+    else:
+        slow_print("Please choose a valid option.\n")
