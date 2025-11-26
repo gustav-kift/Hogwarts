@@ -2,6 +2,7 @@ import os
 import shutil
 import sys, tty, termios
 import time
+import duel_engine as de
 
 def getch():
     fd = sys.stdin.fileno()
@@ -314,5 +315,6 @@ gettin’ to Diagon Alley and all."
 """)
 input("\nPress [ENTER] to continue... ")
 slow_print("""
-The motocycle slows to a halt, landing safely on the ground. In front of you, you see a large 
+The motocycle slows to a halt, landing safely on the ground. In front of you, you see a
+        
 """)
