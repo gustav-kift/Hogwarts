@@ -408,23 +408,7 @@ clear()
 # DIAGON ALLEY HUB (player choice)
 # ---------------------------------------------------------------------
 
-while True:
-    slow_print("""
-You stand at the entrance of Diagon Alley.
-
-Where would you like to go first?
-
-    (1) Ollivanders — get your wand
-    (2) Gringotts — visit the wizard bank
-    (3) Madam Malkin's — school robes
-    (4) Flourish & Blotts — books
-    (5) Follow Hagrid — let him choose
-
-> """)
-    sel = getch()
-    clear()
-
-    if sel == "1":
+def ollivanders():
         slow_print("Hagrid nods. \"Good place to start. Every witch or wizard needs a wand.\"\n")
         slow_print("You head toward a narrow shop with peeling gold letters: OLLIVANDERS.\n")
         ollivander_art = [
@@ -445,23 +429,116 @@ Where would you like to go first?
         for line in ollivander_art:
             slow_print(line.center(shutil.get_terminal_size().columns), 0.02)
         # TODO: Add wand-selection sequence
+def gringotts():
+        slow_print("Hagrid gestures toward a white marble building. \"Gringotts it is. Best do yer banking early.\"\n")
+        gringotts_art = [
+            "⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⠶⠶⠟⠛⠛⠛⠛⠻⠶⠶⣤⣄⠀⠀⠀⠀⠀⠀⠀⠀",
+            "⠀⠀⠀⠀⠀⣠⡴⠛⣋⠄⢒⠫⠁⠰⡀⠐⡄⠈⡉⠒⠠⢙⠛⣶⣀⡀⠀⠀⠀⠀",
+            "⠀⠀⠀⣠⡾⢋⠅⢈⢠⠀⠀⣎⠴⠂⠡⠀⠉⠠⢹⠀⠀⡠⢨⠢⠙⢷⡄⠀⠀⠀",
+            "⠀⠀⣴⠛⠠⢂⠢⡀⠩⠔⠀⠀⠀⢀⣀⡀⠀⡄⠀⠀⠈⠔⢁⣜⠨⢂⠙⣧⠀⠀",
+            "⠀⣼⠋⠴⢑⡀⠁⠆⠁⣀⠔⡚⠉⠍⠉⢉⠙⠻⣆⠀⠀⠀⠁⠀⢀⣾⠀⠘⣷⠀",
+            "⢸⡇⠀⣅⡁⠈⠑⢀⠜⠥⠄⢉⠈⠀⠀⠀⠑⠀⠘⣷⡄⠀⠀⠀⠀⠈⠆⠀⢸⡇",
+            "⣿⠁⠀⡙⠁⠀⠉⣶⠒⠢⡈⢱⡄⠀⠀⠀⠒⠐⠂⠀⡈⠭⣐⡀⠀⢀⣧⣀⠈⣷",
+            "⣿⠀⠀⢀⠀⠀⠀⣿⡀⠀⢠⡀⠋⠐⠀⠀⢀⡀⠀⠉⢌⠁⠀⠀⠀⠈⠘⠀⠀⣿",
+            "⣿⡀⠀⠺⠓⠀⠀⢻⣟⣦⣀⠙⠉⠋⠀⢸⡿⠉⢻⣿⠋⠀⠀⠀⡐⢀⡤⢄⢀⡿",
+            "⠸⣇⠀⠀⣁⡠⠄⠀⢻⣿⢷⣄⡈⠘⠀⠀⠉⠀⣸⣿⡀⠀⠀⠠⢐⠋⠄⠜⢸⠇",
+            "⠀⢿⣄⠘⣁⠄⠀⠀⡀⠙⠻⠯⣷⣦⣤⣤⡶⠞⠡⠿⠧⠄⡀⢋⠲⢄⡀⢠⡿⠀",
+            "⠀⠀⠻⣤⠀⠀⡤⢫⡸⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠠⡐⢌⠀⠀⠀⣡⡟⠀⠀",
+            "⠀⠀⠀⠙⢷⣌⠀⠊⠀⢰⠃⠀⢶⠀⠂⡀⠒⠄⢸⠀⢣⠀⠈⠱⣠⡾⠏⠀⠀⠀",
+            "⠀⠀⠀⠀⠀⠙⠿⣤⣀⠃⠀⠀⠀⡞⠀⢣⠐⡆⠀⠣⠔⣁⣤⠾⠋⠀⠀⠀⠀ ",
+            "⠀⠀⠀⠀⠀⠀⠀⠀⠙⠛⠶⠶⣦⣤⣤⣤⣥⣴⠶⠞⠛⠋⠀⠀⠀⠀⠀⠀⠀⠀"
+        ]
+        for line in gringotts_art:
+            slow_print(line.center(shutil.get_terminal_size().columns), 0.02)
+        # TODO: Add Gringotts vault visit scene
+def madam_malkins():
+        slow_print("Hagrid points to a shop draped in purple fabric. \"Madam Malkin's Robes for All Occasions.\"\n")
+        """
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣠⣤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠔⠚⠉⢡⡞⣹⣯⣻⡌⠉⠓⠢⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠎⠀⠀⠀⣀⣈⣫⣽⣿⣝⣁⠀⠀⠀⠀⠙⢆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣰⠇⠀⠠⣾⣿⣻⡯⢩⣿⣿⣩⣵⢾⣽⣗⠄⠀⠘⣇⣀⡀⠀⠀⠀⠀⠀⠀⠀⡠⠀⠀⠀⠀⠀
+⠀⠀⣠⣴⣒⣒⣳⣦⣄⣀⣀⣀⣀⣘⣢⣿⣧⣀⡐⣛⣡⣾⢇⡿⣾⣻⢾⡘⣧⣭⣙⣋⣀⣼⣻⣔⣃⣀⣀⣀⣀⣠⣴⣞⣓⣒⣦⣄⠀⠀
+⢀⡎⢉⣹⡯⣉⡉⠛⢻⣿⣿⣿⣿⣿⠿⠧⠖⢺⢿⣿⠿⣿⠟⠁⡽⣿⠭⠷⠾⢛⣽⣻⢿⠒⢻⠿⢿⣯⣭⣉⣛⠛⠛⠉⠛⢻⢏⡉⢱⡀
+⠘⣇⠫⠌⣻⠇⢲⣶⣽⠭⣋⣸⣥⡾⠶⠞⠒⠉⠁⠀⠀⠈⠀⡈⢡⠎⠉⠀⠀⠀⠐⠒⠋⠛⢚⠓⠶⠦⡽⣈⠩⣿⣶⡀⢜⣞⠡⠹⢸⠇
+⠀⠈⢳⡚⠿⠤⣿⣯⣧⣺⢋⣉⠉⣁⠀⠈⠀⠀⠀⠉⠀⠀⢠⣽⢯⡆⠀⣤⠂⠀⢠⡄⣶⢁⣘⡄⣴⣲⠙⣿⠻⣦⡻⣿⠈⡯⢓⡟⠁⠀
+⠀⠀⠀⠈⢸⣉⣿⣽⣿⢭⣤⠀⢠⡠⠀⠀⠀⢭⠁⠀⡀⢠⡠⣄⢘⢻⡌⣿⢀⢠⡔⡇⢹⣇⢸⡇⣧⢹⣪⣹⠃⠹⣿⢻⠕⡇⠁⠀⠀⠀
+⠀⠀⠀⠀⢸⣩⣷⢿⠤⠀⡿⣦⢹⡇⣀⡀⡄⣾⠘⣹⢸⣸⡏⣿⢨⢠⢻⣿⢠⣾⡇⣧⠸⡘⠾⠃⠁⠀⠁⠀⠈⠀⣿⢿⣟⡇⠀⠀⠀⠀
+⠀⠀⠀⠀⠸⣀⣿⠾⣇⠀⠇⢿⢸⠇⣁⣿⡇⣷⢹⣸⡸⠇⠁⠉⢸⠸⠇⠏⠀⠁⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⡿⢿⠰⡆⠀⠀⠀⠀
+⠀⠀⠀⠀⢸⢺⣻⠰⢿⢬⠱⠎⡼⠿⠗⠧⠙⠙⠂⠀⠀⠀⠀⠄⠛⠦⠀⠀⠀⠁⠈⠀⠀⠀⠁⠈⠀⠀⠀⠀⣠⡯⠞⢸⠛⡇⠀⠀⠀⠀
+⠀⠀⠀⠀⢸⠨⢽⠣⠤⢟⢤⠂⠠⠖⣿⠀⠸⡇⡾⡠⢿⢾⠑⡇⢸⠱⡩⢾⢅⠀⡴⣌⢤⣇⡄⢺⠛⠖⠈⣹⢫⡽⣼⣟⢒⡇⠀⠀⠀⠀
+⠀⠀⠀⠀⢸⣉⣻⣶⣶⡉⢌⢗⡅⠁⡟⣇⠈⢉⣤⠄⡄⢠⠄⣰⠀⢄⢠⢠⣄⣠⣠⠠⡉⠀⣠⢻⡀⢀⣼⢣⣻⠿⢻⣟⡛⡇⠀⠀⠀⠀
+⠀⠀⠀⠀⢈⢧⣽⡺⡘⣿⠎⣪⢺⡾⡛⠈⠓⣄⠁⠃⠁⠈⠀⠉⠁⠀⠈⠈⠈⠀⠈⢁⣡⢾⡥⢜⣷⡻⡳⣿⡏⣷⣿⣗⣶⡇⠀⠀⠀⠀
+⠀⠀⠀⠀⠸⠦⢼⣷⣕⣾⣁⣂⢡⡹⣿⡳⢤⡨⠔⢶⣄⣀⣀⣀⡀⣀⢀⢀⣀⣠⣖⠋⢀⣄⠲⢷⢎⣕⣼⣽⣮⣿⣟⡗⣂⡇⠀⠀⠀⠀
+⠀⠀⠀⠀⠠⣿⣻⡽⠺⣉⣃⣬⡦⣵⠘⢹⡻⣗⡟⠉⢐⣈⣉⣉⣿⣿⣿⣉⣑⣨⡽⢏⡟⢯⡋⠃⢮⠶⣡⣀⠹⠱⢮⣷⠴⡃⠀⠀⠀⠀
+⠀⠀⠀⠀⣸⡠⣾⣵⣶⣻⣻⠷⠾⣆⣶⣿⠵⠞⠚⢛⡭⢝⣛⣂⣈⣡⣉⣒⡶⠿⣉⣙⢻⠺⢽⡲⣦⠿⠶⠿⡽⣶⣦⣿⣭⢳⠀⠀⠀⠀
+⠀⠀⠀⣴⣹⣢⣬⣿⣿⣿⣿⣿⣯⣉⣨⣽⣿⣮⡝⢡⣾⣿⣟⣿⣿⡿⣿⣿⣿⢵⠄⠱⣭⣽⣭⣿⣿⣿⣿⣿⣿⣿⣯⣤⣼⣷⣷⠄⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠋⠿⣿⣿⣿⣿⣿⣿⡿⠟⠣⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        """
+        # TODO: Add robe-fitting scene
+def flourish_blotts():
+        slow_print("You make your way toward a towering bookstore. \"Flourish & Blotts,\" Hagrid reads. \"You'll need yer books.\"\n")
+        flourish_blotts_art = [
+             "⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+             "⠀⠀⠀⠀⠀⠀⠀⢀⡾⡩⠹⢒⡶⠦⣤⣤⣤⣤⣤⡤⠤⠶⣚⠫⠐⠐⠩⢛⠶⢤⣤⣀⣀⣀⣀⣠⣤⠴⠖⡛⡹⣆⠀⠀⠀⠀⠀⠀⠀⠀",
+             "⠀⠀⠀⠀⢀⣠⠶⠫⠈⠀⠀⠀⠀⠈⠉⠀⠀⠀⠀⠀⠉⠀⠀⠀⠀⠀⠀⠀⠈⠁⠀⠒⠒⠒⠂⠀⠀⠉⠀⠀⠈⠨⠳⣄⡀⠀⠀⠀⠀⠀",
+             "⠀⠀⠀⠊⠐⠂⠄⠠⡤⣍⠵⣱⡀⠀⠀⠀⠀⠀⠀⠀⠐⠁⠀⡀⢠⢀⠅⡐⡈⠄⠀⠀⠀⠀⠀⠀⠀⠀⡰⣰⠒⡠⢀⠨⠡⠤⡀⠄⠀⠀",
+             "⠀⢨⠱⠀⠚⠗⠀⡶⡀⡐⠀⠁⣇⢣⠀⠀⠀⠀⠀⠀⠀⠀⢱⢂⢀⠀⠀⢲⠈⠀⠀⠀⠀⠀⠀⠀⢀⢃⡅⠂⠪⠐⢠⡄⠰⠲⠀⡆⡒⠀",
+             "⠀⠀⠴⢁⢒⢠⠐⠘⡇⠐⠀⣄⠌⢧⠓⢠⠀⠀⠀⠀⠸⠄⠰⠀⢨⠀⡜⣦⠠⠖⠀⠀⠀⠀⠠⢀⢊⠖⠀⠄⠐⠐⣣⠑⢀⠰⡀⠄⠡⠀",
+             "⠈⠀⠁⡨⣭⠘⡂⢠⠙⠈⢀⡐⠄⡈⠠⠈⠰⡄⠀⠀⠀⠀⣈⠤⣈⡀⡧⠲⠀⠀⠀⠀⠀⡔⠈⠠⠈⠀⠁⠂⠀⡸⠁⠀⡃⢎⡡⠈⢁⠃",
+             "⠀⠀⠀⠀⡗⠀⡴⠈⣀⠀⠪⠭⣐⠂⠠⠃⠇⡑⡄⠀⠀⠀⠀⠀⠠⠡⠁⠀⠀⠀⠀⠀⡐⠄⡁⠃⠀⠐⡈⡍⠀⠁⠃⢀⠁⠰⠈⠀⠀⠀",
+             "⠀⠀⠀⠀⠘⠀⠀⠀⢸⡆⠒⠄⢣⡓⠦⠄⠁⢃⠣⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠂⠁⠀⠄⠃⢂⠀⢠⠁⠀⠀⠀⠘⠀⠀⠀⠀",
+             "⠀⠀⠀⠀⠀⠀⠀⠀⠈⡇⡇⠠⣀⢍⠪⢗⣥⠸⠀⡶⠀⢸⠁⡔⠀⡀⣠⠡⢰⠀⠀⠆⠠⢁⡑⠆⢈⠁⡠⠀⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+             "⠀⠀⠀⠀⠀⠀⠀⠀⢰⡇⠃⠀⠠⡌⢳⣀⠈⠃⢈⡁⠀⠀⠀⠀⠀⠀⠀⠀⠈⠀⠀⢈⠀⠂⢁⢀⠋⡠⠀⢀⢻⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+             "⠀⠀⠀⠀⠀⣤⣀⣤⠞⠔⠀⠀⠀⠀⠀⡈⢙⢶⠄⠇⡂⠀⠀⠀⠀⠀⠀⠀⠀⠀⡂⠂⢔⠀⠃⡀⠈⠀⠀⠈⢌⢧⣀⣀⠀⠀⠀⠀⠀⠀",
+             "⠀⠀⠀⠀⣼⠃⠒⠀⠁⠀⠀⠀⠀⠀⠀⠢⣑⢂⡌⡀⣅⠀⠀⠀⠀⠀⠀⠀⠀⢀⠀⢀⠄⠂⡁⠀⠀⠀⠀⠀⠀⠑⠊⢉⢷⡀⠀⠀⠀⠀",
+             "⠀⠀⠀⢰⡇⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠧⢈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠎⣧⠀⠀⠀⠀",
+             "⠀⠀⠀⢸⢰⠀⠀⢀⠄⠢⢂⡤⠀⠀⠀⠀⠀⠀⠀⢀⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⠠⡀⣤⠀⣠⠀⠀⢀⡀⣀⠄⠀⠀⠰⢸⡄⠀⠀⠀",
+             "⠀⠀⠀⢺⢸⠀⠀⢼⡇⠀⠀⡇⢠⢦⢠⡄⡄⣴⠄⢸⠁⠀⠄⡇⡄⠀⠠⡲⠀⠀⢀⣹⠇⢨⡀⡇⢠⢠⠀⡓⢸⠂⡄⡂⠀⢸⡇⠀⠀⠀",
+             "⠀⠀⠀⢸⡈⠀⢠⠮⠒⠀⠠⡧⠸⠼⠠⡧⣤⢸⣤⢸⡄⠀⡧⣇⢇⠀⢠⠱⡒⡀⠀⣸⣬⡰⠃⢧⠸⣼⠀⡧⢸⡆⠤⠟⢠⢸⠃⠀⠀⠀",
+             "⠀⠀⠀⠀⢧⠁⠙⠀⠀⠐⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⠀⠠⡌⠀⠀⠁⠁⠁⠈⠆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠀⢄⡟⠀⠀⠀⠀",
+             "⠀⠀⠀⠀⠈⢧⡡⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⢌⡾⠁⠀⠀⠀⠀",
+             "⠀⠀⠀⠀⠀⠀⠳⣬⡂⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠀⣠⠏⠀⠀⠀⠀⠀⠀",
+             "⠀⠀⠀⠀⠀⠀⠀⠀⠙⠶⣄⣂⠠⠀⣀⠀⠠⠄⠤⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠤⠤⠤⠀⡀⢀⠀⠄⣂⡵⠚⠁⠀⠀⠀⠀⠀⠀⠀",
+             "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠙⠓⠒⠖⠋⠉⠉⠉⠒⢥⡠⡀⠀⠀⠀⡠⢀⡵⠚⠉⠉⠉⠓⠦⠶⠒⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+             "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢦⡠⡀⢄⡴⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+             "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⣎⡞⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+             "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+
+        ]
+        for line in flourish_blotts_art:
+            slow_print(line.center(shutil.get_terminal_size().columns), 0.02)
+        # TODO: Add bookshop scene
+while True:
+    slow_print("""
+You stand at the entrance of Diagon Alley.
+
+Where would you like to go first?
+
+    (1) Ollivanders — get your wand
+    (2) Gringotts — visit the wizard bank
+    (3) Madam Malkin's — school robes
+    (4) Flourish & Blotts — books
+    (5) Follow Hagrid — let him choose
+
+> """)
+    sel = getch()
+    clear()
+
+    if sel == "1":
+        ollivanders()
         break
 
     elif sel == "2":
-        slow_print("Hagrid gestures toward a white marble building. \"Gringotts it is. Best do yer banking early.\"\n")
-        # TODO: Add Gringotts vault visit scene
+        gringotts()
         break
 
     elif sel == "3":
-        slow_print("Hagrid points to a shop draped in purple fabric. \"Madam Malkin's Robes for All Occasions.\"\n")
-        # TODO: Add robe-fitting scene
+        madam_malkins()
         break
-
     elif sel == "4":
-        slow_print("You make your way toward a towering bookstore. \"Flourish & Blotts,\" Hagrid reads. \"You'll need yer books.\"\n")
-        # TODO: Add bookshop scene
+        flourish_blotts()
         break
-
     elif sel == "5":
         slow_print("Hagrid chuckles. \"Right then, stick with me. I'll show yeh the important bits first.\"\n")
         # TODO: Add guided tour sequence
