@@ -3,8 +3,10 @@ import shutil
 import sys, tty, termios
 import time
 import duel_engine as de
+from wand_quiz_engine import load_tables, compute_wand
+import random
 
-def getch():
+def get_key():
     fd = sys.stdin.fileno()
     old_settings = termios.tcgetattr(fd)
     try:
@@ -14,79 +16,66 @@ def getch():
         termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
     return ch
 
-def clear():
+def cls():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-def slow_print(text, delay=0.04):
-    for line in text.split("\n"):
+def text(msg, speed=0.03):
+    for line in msg.split("\n"):
         print(line)
-        time.sleep(delay)
+        time.sleep(speed)
 
-# ---------------------------------------------------------------------
-# BOOT SEQUENCE (retro terminal style)
-# ---------------------------------------------------------------------
-clear()
-slow_print("MAGICAL TERMINAL SYSTEM v2.3 — MINISTRY OF MAGIC", 0.03)
-slow_print("COPYRIGHT (C) 1984 — ALL RIGHTS RESERVED\n", 0.03)
+def center_print(lines):
+    width = shutil.get_terminal_size().columns
+    for line in lines:
+        print(line.center(width))
+        time.sleep(0.02)
+
+# Boot up
+cls()
+text("MINISTRY MAGIC TERMINAL [v2.4]", 0.02)
+text("(c) 1991 Department of Mysteries", 0.02)
 time.sleep(0.5)
+text("Connecting to Floo Network...", 0.05)
+text("System Ready.\n")
+input("Press [ENTER] to login... ")
+cls()
 
-slow_print("INITIALIZING...", 0.05)
-time.sleep(0.4)
-slow_print("LOADING SPELL MODULES... OK", 0.05)
-slow_print("CHECKING OWL POST CONNECTION... OK", 0.05)
-slow_print("PREPARING USER INTERFACE... OK", 0.05)
-slow_print("\nSYSTEM READY.\n", 0.04)
-input("Press [ENTER] to begin... ")
-clear()
-
-# ---------------------------------------------------------------------
-# PLAYER SETUP
-# ---------------------------------------------------------------------
-
-slow_print("PLEASE ENTER YOUR FIRST NAME")
+# Setup
+text("ENTER FIRST NAME")
 fname = input("> ")
-
-slow_print("\nPLEASE ENTER YOUR LAST NAME")
+text("\nENTER LAST NAME")
 lname = input("> ")
+cls()
 
-clear()
+name = f"{fname} {lname}"
 
-name = fname + " " + lname
+def get_pronouns():
+    print("SELECT PRONOUNS")
+    print("1. She/Her")
+    print("2. He/Him")
+    print("3. They/Them")
+    return get_key()
 
-def pronoun_choice():
-    slow_print("""
-SELECT PRONOUNS
-    (1) SHE / HER
-    (2) HE / HIM
-    (3) THEY / THEM
+print("Updating records...")
+time.sleep(0.5)
+cls()
 
-> """)
-    return getch()
+while True:
+    choice = get_pronouns()
+    if choice == "1":
+        pronouns = "Ms. "
+        break
+    elif choice == "2":
+        pronouns = "Mr. "
+        break
+    elif choice == "3":
+        pronouns = "Mx. "
+        break
 
-slow_print("LOADING USER PROFILE...\n")
-time.sleep(0.6)
-clear()
+cls()
 
-pronouns_choice = pronoun_choice()
-
-if pronouns_choice == "1":
-    pronouns = "Ms. "
-elif pronouns_choice == "2":
-    pronouns = "Mr. "
-elif pronouns_choice == "3":
-    pronouns = "Mx. "
-else:
-    pronoun_choice()
-
-clear()
-
-# ---------------------------------------------------------------------
-# OWL ARRIVAL + ART
-# ---------------------------------------------------------------------
-
-columns = shutil.get_terminal_size().columns
-
-slow_print("AN OWL APPROACHES WITH UNUSUAL SPEED...\n", 0.04)
+# The Owl
+text("A barn owl swoops down and drops a thick yellowish envelope at your feet.\n")
 
 owl_art = [
 "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠒⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
@@ -101,59 +90,33 @@ owl_art = [
 "⢰⣿⡇⢰⡆⠀⢀⣀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣾⣾⣿⠀⠀⠀⠰⠆⠀",
 "⣸⡿⣇⣸⣟⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀"
 ]
+center_print(owl_art)
 
-for line in owl_art:
-    slow_print(line.center(columns), 0.02)
+text("\nIt's addressed to you. The ink is emerald green.")
+print("\n1. Ignore it")
+print("2. Pick it up")
 
-slow_print("\nTHE OWL DROPS A LETTER AT YOUR FEET.\n")
-slow_print("""
-    (1) IGNORE THE LETTER
-    (2) PICK UP THE LETTER
+if get_key() == "1":
+    cls()
+    text("You ignore it. But more come.")
+    text("Hundreds of them. Through the chimney. Under the door.")
+    text("Eventually, you have to pick one up.")
+    time.sleep(1)
 
-> 
-""")
-char = getch()
+cls()
+text("The seal is a coat of arms with a lion, an eagle, a badger, and a snake.\n")
+input("Press [ENTER] to rip it open... ")
+cls()
 
-clear()
+width = shutil.get_terminal_size().columns
+print("HOGWARTS SCHOOL of WITCHCRAFT and WIZARDRY".center(width))
+print("Headmaster: Albus Dumbledore".center(width))
 
-if char == "1":
-    slow_print("As you open the door, a letter slides under it with a soft *hoot*.\n")
-    while True:
-        slow_print("""
-    (1) IGNORE THE LETTER
-    (2) PICK UP THE LETTER
-
-> """)
-        sel = getch()
-        clear()
-        if sel == "1":
-            slow_print("Another letter slides under the door, adding to the pile.\n")
-        if sel == "2":
-            break
-
-clear()
-
-# ---------------------------------------------------------------------
-# LETTER SEAL + CONTENT
-# ---------------------------------------------------------------------
-
-slow_print("The letter is sealed with a red wax stamp bearing four creatures and a large 'H'.\n")
-input("Press [ENTER] to break the seal... ")
-clear()
-
-slow_print("You unfold the letter and read:\n")
-
-slow_print("HOGWARTS SCHOOL of WITCHCRAFT and WIZARDRY".center(columns))
-slow_print("Headmaster: Albus Dumbledore".center(columns))
-slow_print("(Order of Merlin, First Class, Grand Sorc., Chf. Warlock,".center(columns))
-slow_print("Supreme Mugwump, International Confed. of Wizards)".center(columns))
-
-slow_print(f"""
+text(f"""
 Dear {pronouns}{lname},
 
 We are pleased to inform you that you have been accepted at Hogwarts School of
-Witchcraft and Wizardry. Please find enclosed a list of all necessary books
-and equipment.
+Witchcraft and Wizardry.
 
 Term begins on 1 September. We await your owl by no later than 31 July.
 
@@ -162,22 +125,18 @@ Minerva McGonagall
 Deputy Headmistress
 """)
 
-input("Press [ENTER] to view the supply list... ")
-clear()
+input("Press [ENTER] to see the supply list... ")
+cls()
 
-slow_print("""
-UNIFORM
--------
-(1) Three sets of plain work robes (black)
-(2) One plain pointed hat (black)
-(3) Gloves (dragon hide or similar)
-(4) One winter cloak (black, silver fastenings)
-All clothing must be labeled with student's name.
+text("""
+REQUIRED:
+- 3 sets of plain work robes (black)
+- 1 pointed hat (black) for day wear
+- 1 pair of protective gloves (dragon hide)
+- 1 winter cloak
 
-COURSE BOOKS
-------------
-A copy of each of the following:
-- The Standard Book of Spells (Grade 1)
+BOOKS:
+- Standard Book of Spells (Grade 1)
 - A History of Magic
 - Magical Theory
 - A Beginner's Guide to Transfiguration
@@ -186,101 +145,62 @@ A copy of each of the following:
 - Fantastic Beasts and Where to Find Them
 - The Dark Forces: A Guide to Self-Protection
 
-OTHER EQUIPMENT
----------------
-1 wand
-1 cauldron (pewter, standard size 2)
-1 set phials (glass or crystal)
-1 telescope
-1 set brass scales
+EQUIPMENT:
+- 1 Wand
+- 1 Cauldron (pewter, size 2)
+- 1 Set of phials
+- 1 Telescope
+- 1 Set brass scales
 
-Students may bring an owl OR a cat OR a toad.
+(Students may bring an owl OR a cat OR a toad)
 """)
 
-slow_print("PARENTS ARE REMINDED THAT FIRST YEARS".center(columns))
-slow_print("ARE NOT ALLOWED THEIR OWN BROOMSTICK".center(columns))
+text("\nPARENTS ARE REMINDED THAT FIRST YEARS ARE NOT ALLOWED THEIR OWN BROOMSTICK.")
+input("\nPress [ENTER] continue... ")
+cls()
 
-input("\nPress [ENTER] to continue... ")
-clear()
-
-# ---------------------------------------------------------------------
-# KNOCK AT THE DOOR
-# ---------------------------------------------------------------------
-
+# Hagrid
 while True:
-    slow_print("""
-THERE IS A HEAVY KNOCK AT YOUR DOOR.
-
-    (1) OPEN THE DOOR
-    (2) IGNORE IT
-
-> """)
-    sel = getch()
-    clear()
+    text("BOOM.")
+    text("Someone is knocking on the door. Hard.")
+    print("\n1. Open the door")
+    print("2. Hide")
+    
+    sel = get_key()
+    cls()
 
     if sel == "1":
-        slow_print("""
-A very large man with a wild beard ducks inside.
-
-"Ah! There yeh are," he says. "I've been sent ter guide yeh to Diagon Alley.
-Got yer Hogwarts letter, did yeh?"
-""")
+        text("You open the door.")
+        text("A giant man almost fills the frame. He looks wild, but his eyes are kind.")
+        text("\n'Sorjeh,' he says. 'Didn't mean to startle yeh.'")
         break
-
     if sel == "2":
-        slow_print("""
-Your door is blown off its hinges.
-
-A very large man with a wild beard steps through the dust.
-
-"Ah! There yeh are," he says. "I've been sent ter guide yeh to Diagon Alley.
-Got yer Hogwarts letter, did yeh?"
-""")
+        text("BOOM.")
+        text("The door flies off its hinges.")
+        text("A giant man steps over it. 'Sorjeh,' he grunts.")
         break
 
-# ---------------------------------------------------------------------
-# NEXT CHOICE
-# ---------------------------------------------------------------------
+text("""
+'Name's Rubeus Hagrid. Keeper of Keys and Grounds at Hogwarts.'
 
-while True:
-    slow_print("""
-    (1) GO WITH THE MAN
-    (2) STAY WHERE YOU ARE
+He looks at you and grins.
 
-> """)
-    sel = getch()
-
-    if sel == "1":
-        clear()
-        slow_print("You follow the large man outside.\n")
-        break
-
-    if sel == "2":
-        clear()
-        slow_print("""
-You decide to stay where you are.
-
-The man sighs deeply. "Right. Stubborn one, eh?"
-
-Before you can react, he gently—but firmly—picks you up under one arm
-and starts walking toward the street.
-
-"Come on now. Diagon Alley won't wait all day."
+'Dumbledore sent me. Reckon you'll need help gettin' your things.'
 """)
-        break
 
-slow_print("""
-A giant blue motorcycle is parked outside. 
-The man props you up on the seat and settles in behind you.
+input("Press [ENTER]... ")
+cls()
 
-The engine growls like a dragon waking up.
+text("""
+He leads you to a massive motorcycle parked on the street.
 
-Before you can ask a single question, the bike lifts off the ground —
-slowly at first, then rising higher and higher.
+'Hop on,' he says.
 
-You, the large man, and the motorcycle are suddenly flying.
+The engine roars like a dragon. Suddenly, the wheels lift off the pavement.
+You're flying. The city lights shrink below you.
 """)
-slow_print("""
+
+text("""
               .
                					
               |					
@@ -299,85 +219,23 @@ slow_print("""
 .-'  (_.'          .')                    `(    )  ))
                   (_  )                     ` __.:'
                                         	
---..,___.--,--'`,---..-.--+--.,,-,,..._.--..-._.-a:f--.
 """)
-slow_print("""
-The wind whips past your ears as the motorcycle climbs higher.
+text("'Hang on tight!' Hagrid yells over the wind.")
+input("\nPress [ENTER] to land... ")
+cls()
 
-The man pats your shoulder gently. 
-"Reckon I should introduce meself. Name’s Rubeus Hagrid."
+text("You touch down in a dingy London alleyway.")
+text("Hagrid leads you into a pub called 'The Leaky Cauldron'.")
+text("It's dark and smells like sherry. Everyone seems to know Hagrid.")
+input("Press [ENTER] to go out back... ")
+cls()
 
-He gives a small, proud nod.
-
-"Keeper of Keys and Grounds at Hogwarts. 
-Dumbledore sent me ter fetch yeh. Figured yeh might need a bit o’ guidance
-gettin’ to Diagon Alley and all."
-""")
-input("\nPress [ENTER] to continue... ")
-slow_print("""
-The motorcycle slows to a halt, landing safely on the ground.
-
-In front of you, you see a narrow London street — ordinary at first glance — 
-until Hagrid leads you toward a dingy-looking pub squeezed between two shops.
-
-Above the door hangs a battered sign:
-
-            THE LEAKY CAULDRON
-
-Hagrid grins. "Right then. This way."
-
-""")
-
-input("Press [ENTER] to follow Hagrid inside... ")
-clear()
-
-# ---------------------------------------------------------------------
-# THE LEAKY CAULDRON
-# ---------------------------------------------------------------------
-
-slow_print("""
-You step into the Leaky Cauldron.
-
-The moment the door closes behind you, the noise of the street vanishes.
-The pub is dim, warm, and crowded with cloaked figures. A few turn and stare.
-""")
-
-slow_print("""
-A toothless old wizard waves cheerfully. 
-"Bless my soul — a first year!" he croaks.
-
-Hagrid gives him a polite nod and guides you toward the back of the pub.
-""")
-
-input("Press [ENTER] to continue... ")
-clear()
-
-# ---------------------------------------------------------------------
-# BRICK WALL ENTRY TO DIAGON ALLEY
-# ---------------------------------------------------------------------
-
-slow_print("""
-Hagrid leads you into a small courtyard.
-
-He begins tapping bricks on the wall with a pink umbrella.
-"Three up... two across..."
-
-Each tap makes the brick glow faintly.
-""", 0.04)
-
+text("You stand facing a brick wall in the trash area.")
+text("'Stand back, Harry... er, sorry, force of habit. Stand back.'")
+text("\nHagrid taps a specific brick with his pink umbrella.")
 time.sleep(0.5)
-slow_print("\nWith a rumble, the wall pulls apart — folding backward like a jagged doorway.\n")
-
-"""
-
-
-
-
-
-
-
-
-"""
+text("\nThe bricks wiggle, then rotate. A hole appears and grows wider.")
+text("Suddenly, you're looking through an archway onto a cobbled street.")
 
 diagon_art = [
 "⠀⠀⢠⡤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⢤⠀⠀",
@@ -387,98 +245,354 @@ diagon_art = [
 "⢸⡿⠀⠈⠀⠀⠀⠀⣿⠀⣿⢸⡇⠸⢼⡆⢿⠀⣿⢸⡆⠀⡇⣿⠰⡿⠀⠀⡦⣷⠀⣻⠀⠀⡇⠀⢸⡏⢁⠀⣽⠀⠀⠀⠀⠀⠁⢸⢸",
 "⠈⢷⣣⠀⠀⠀⠀⠀⠛⠒⠁⠘⠃⠄⠀⠣⠈⠂⠋⠀⠑⠚⠁⠛⠀⠘⠀⠐⠀⠘⠂⠛⠐⠰⠓⠚⠘⠃⠊⠀⠛⠀⠀⠀⠀⠀⢀⣬⡟",
 "⠀⠀⢻⢣⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⢮⠏⠀",
-"⠀⠀⠈⠓⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠚⠀⠀",
+"⠀⠀⠈⠓⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠚⠀⠀",
 ]
+center_print(diagon_art)
 
-for line in diagon_art:
-    slow_print(line.center(shutil.get_terminal_size().columns), 0.02)
+text(f"\nIt's packed. Cauldrons, owls, broomsticks. Magic everywhere.")
+text(f"'Welcome,' Hagrid beams. 'To Diagon Alley.'")
+input("\nPress [ENTER] to walk in... ")
+cls()
 
-slow_print("""
-Behind the opening lies a bustling wizarding street filled with owls, cauldrons, glittering shop windows,
-and more people than you’ve ever seen in one place.
+def run_ollivanders():
+    cls()
+    text("'Makers of Fine Wands since 382 B.C.'")
+    text("The shop is tiny. Thousands of narrow boxes are piled to the ceiling.")
+    
+    ollivander_art = [
+        "⣿⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⣿",
+        "⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡠⠤⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿",
+        "⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣠⡤⠶⠖⠂⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿",
+        "⣿⠀⠀⠀⠀⢀⡀⠤⠤⣀⡀⠀⢀⣀⣠⠤⠿⠛⠛⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿",
+        "⣿⠀⠀⡠⠊⢀⣀⠠⠄⠒⠋⢫⡉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿",
+        "⣿⠀⢶⠅⡨⠒⠀⠻⠁⠀⠀⠀⢿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿",
+        "⣿⠀⠀⢸⠁⠀⠀⠀⠀⠀⠀⠀⢸⡗⣦⠂⠀⢲⡔⠀⠐⢢⠒⣔⠀⠲⠀⢰⡄⠐⠦⡀⠐⠂⠲⠒⠢⡀⢒⠐⠢⠐⡒⠢⡄⢠⠒⠄⠀⣿",
+        "⣿⠀⠀⠸⡄⠀⠀⠀⠀⠀⠀⢀⣿⠁⣿⠀⢀⢸⡆⢀⡀⠤⠀⠸⡄⠁⢀⠁⢳⡀⡁⠘⢦⠀⢸⠀⢀⡟⢘⠀⢃⡀⡄⠲⡅⢠⠙⢲⠀⣿",
+        "⣿⠀⠀⠀⠹⣦⣀⠀⠀⣀⣤⠟⠁⠀⢈⡈⠀⢁⠀⠁⠀⠉⠀⠀⠁⠀⠁⠀⠀⠁⠈⠀⠀⠀⠁⠀⠁⠀⠈⠁⠀⢈⠁⠀⣈⣀⡁⠀⠀⣿",
+        "⣿⠀⠀⠀⠀⠀⠉⠉⠉⠉⠀⠀⠀⢰⠀⢹⣥⡞⣶⡖⡆⣶⡇⣦⢸⣴⡖⡆⠘⣼⢡⣦⣶⠀⣷⡄⡆⣶⡆⡆⢱⠃⠊⡎⡌⢣⠀⠀⠀⣿",
+        "⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠀⠀⠀⠀⠀⠀⠀⠀⣿",
+        "⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿",
+        "⣿⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣿",
+    ]
+    center_print(ollivander_art)
 
-Hagrid beams. 
-"Welcome, {}. Welcome to Diagon Alley."
-""".format(name), 0.04)
+    text("\nAn old man slides out from behind a shelf.")
+    text(f"'Hello,' he says softly. 'I wondered when I'd be seeing you, {name}.'")
+    text("'Mr. Ollivander, at your service.'")
 
-input("\nPress [ENTER] to step inside... ")
-clear()
+    input("\nPress [ENTER]... ")
+    cls()
 
-# ---------------------------------------------------------------------
-# DIAGON ALLEY HUB (player choice)
-# ---------------------------------------------------------------------
+    tables = load_tables()
 
-def ollivanders():
-        slow_print("Hagrid nods. \"Good place to start. Every witch or wizard needs a wand.\"\n")
-        slow_print("You head toward a narrow shop with peeling gold letters: OLLIVANDERS.\n")
-        ollivander_art = [
-            "⣿⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⣿",
-            "⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡠⠤⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿",
-            "⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣠⡤⠶⠖⠂⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿",
-            "⣿⠀⠀⠀⠀⢀⡀⠤⠤⣀⡀⠀⢀⣀⣠⠤⠿⠛⠛⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿",
-            "⣿⠀⠀⡠⠊⢀⣀⠠⠄⠒⠋⢫⡉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿",
-            "⣿⠀⢶⠅⡨⠒⠀⠻⠁⠀⠀⠀⢿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿",
-            "⣿⠀⠀⢸⠁⠀⠀⠀⠀⠀⠀⠀⢸⡗⣦⠂⠀⢲⡔⠀⠐⢢⠒⣔⠀⠲⠀⢰⡄⠐⠦⡀⠐⠂⠲⠒⠢⡀⢒⠐⠢⠐⡒⠢⡄⢠⠒⠄⠀⣿",
-            "⣿⠀⠀⠸⡄⠀⠀⠀⠀⠀⠀⢀⣿⠁⣿⠀⢀⢸⡆⢀⡀⠤⠀⠸⡄⠁⢀⠁⢳⡀⡁⠘⢦⠀⢸⠀⢀⡟⢘⠀⢃⡀⡄⠲⡅⢠⠙⢲⠀⣿",
-            "⣿⠀⠀⠀⠹⣦⣀⠀⠀⣀⣤⠟⠁⠀⢈⡈⠀⢁⠀⠁⠀⠉⠀⠀⠁⠀⠁⠀⠀⠁⠈⠀⠀⠀⠁⠀⠁⠀⠈⠁⠀⢈⠁⠀⣈⣀⡁⠀⠀⣿",
-            "⣿⠀⠀⠀⠀⠀⠉⠉⠉⠉⠀⠀⠀⢰⠀⢹⣥⡞⣶⡖⡆⣶⡇⣦⢸⣴⡖⡆⠘⣼⢡⣦⣶⠀⣷⡄⡆⣶⡆⡆⢱⠃⠊⡎⡌⢣⠀⠀⠀⣿",
-            "⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠀⠀⠀⠀⠀⠀⠀⠀⣿",
-            "⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿",
-            "⣿⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣿",
-        ]
-        for line in ollivander_art:
-            slow_print(line.center(shutil.get_terminal_size().columns), 0.02)
-        # TODO: Add wand-selection sequence
-def gringotts():
-        slow_print("Hagrid gestures toward a white marble building. \"Gringotts it is. Best do yer banking early.\"\n")
-        gringotts_art = [
-            "⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⠶⠶⠟⠛⠛⠛⠛⠻⠶⠶⣤⣄⠀⠀⠀⠀⠀⠀⠀⠀",
-            "⠀⠀⠀⠀⠀⣠⡴⠛⣋⠄⢒⠫⠁⠰⡀⠐⡄⠈⡉⠒⠠⢙⠛⣶⣀⡀⠀⠀⠀⠀",
-            "⠀⠀⠀⣠⡾⢋⠅⢈⢠⠀⠀⣎⠴⠂⠡⠀⠉⠠⢹⠀⠀⡠⢨⠢⠙⢷⡄⠀⠀⠀",
-            "⠀⠀⣴⠛⠠⢂⠢⡀⠩⠔⠀⠀⠀⢀⣀⡀⠀⡄⠀⠀⠈⠔⢁⣜⠨⢂⠙⣧⠀⠀",
-            "⠀⣼⠋⠴⢑⡀⠁⠆⠁⣀⠔⡚⠉⠍⠉⢉⠙⠻⣆⠀⠀⠀⠁⠀⢀⣾⠀⠘⣷⠀",
-            "⢸⡇⠀⣅⡁⠈⠑⢀⠜⠥⠄⢉⠈⠀⠀⠀⠑⠀⠘⣷⡄⠀⠀⠀⠀⠈⠆⠀⢸⡇",
-            "⣿⠁⠀⡙⠁⠀⠉⣶⠒⠢⡈⢱⡄⠀⠀⠀⠒⠐⠂⠀⡈⠭⣐⡀⠀⢀⣧⣀⠈⣷",
-            "⣿⠀⠀⢀⠀⠀⠀⣿⡀⠀⢠⡀⠋⠐⠀⠀⢀⡀⠀⠉⢌⠁⠀⠀⠀⠈⠘⠀⠀⣿",
-            "⣿⡀⠀⠺⠓⠀⠀⢻⣟⣦⣀⠙⠉⠋⠀⢸⡿⠉⢻⣿⠋⠀⠀⠀⡐⢀⡤⢄⢀⡿",
-            "⠸⣇⠀⠀⣁⡠⠄⠀⢻⣿⢷⣄⡈⠘⠀⠀⠉⠀⣸⣿⡀⠀⠀⠠⢐⠋⠄⠜⢸⠇",
-            "⠀⢿⣄⠘⣁⠄⠀⠀⡀⠙⠻⠯⣷⣦⣤⣤⡶⠞⠡⠿⠧⠄⡀⢋⠲⢄⡀⢠⡿⠀",
-            "⠀⠀⠻⣤⠀⠀⡤⢫⡸⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠠⡐⢌⠀⠀⠀⣡⡟⠀⠀",
-            "⠀⠀⠀⠙⢷⣌⠀⠊⠀⢰⠃⠀⢶⠀⠂⡀⠒⠄⢸⠀⢣⠀⠈⠱⣠⡾⠏⠀⠀⠀",
-            "⠀⠀⠀⠀⠀⠙⠿⣤⣀⠃⠀⠀⠀⡞⠀⢣⠐⡆⠀⠣⠔⣁⣤⠾⠋⠀⠀⠀⠀ ",
-            "⠀⠀⠀⠀⠀⠀⠀⠀⠙⠛⠶⠶⣦⣤⣤⣤⣥⣴⠶⠞⠛⠋⠀⠀⠀⠀⠀⠀⠀⠀"
-        ]
-        for line in gringotts_art:
-            slow_print(line.center(shutil.get_terminal_size().columns), 0.02)
-        # TODO: Add Gringotts vault visit scene
-def madam_malkins():
-        slow_print("Hagrid points to a shop draped in purple fabric. \"Madam Malkin's Robes for All Occasions.\"\n")
-        """
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣠⣤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠔⠚⠉⢡⡞⣹⣯⣻⡌⠉⠓⠢⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠎⠀⠀⠀⣀⣈⣫⣽⣿⣝⣁⠀⠀⠀⠀⠙⢆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣰⠇⠀⠠⣾⣿⣻⡯⢩⣿⣿⣩⣵⢾⣽⣗⠄⠀⠘⣇⣀⡀⠀⠀⠀⠀⠀⠀⠀⡠⠀⠀⠀⠀⠀
-⠀⠀⣠⣴⣒⣒⣳⣦⣄⣀⣀⣀⣀⣘⣢⣿⣧⣀⡐⣛⣡⣾⢇⡿⣾⣻⢾⡘⣧⣭⣙⣋⣀⣼⣻⣔⣃⣀⣀⣀⣀⣠⣴⣞⣓⣒⣦⣄⠀⠀
-⢀⡎⢉⣹⡯⣉⡉⠛⢻⣿⣿⣿⣿⣿⠿⠧⠖⢺⢿⣿⠿⣿⠟⠁⡽⣿⠭⠷⠾⢛⣽⣻⢿⠒⢻⠿⢿⣯⣭⣉⣛⠛⠛⠉⠛⢻⢏⡉⢱⡀
-⠘⣇⠫⠌⣻⠇⢲⣶⣽⠭⣋⣸⣥⡾⠶⠞⠒⠉⠁⠀⠀⠈⠀⡈⢡⠎⠉⠀⠀⠀⠐⠒⠋⠛⢚⠓⠶⠦⡽⣈⠩⣿⣶⡀⢜⣞⠡⠹⢸⠇
-⠀⠈⢳⡚⠿⠤⣿⣯⣧⣺⢋⣉⠉⣁⠀⠈⠀⠀⠀⠉⠀⠀⢠⣽⢯⡆⠀⣤⠂⠀⢠⡄⣶⢁⣘⡄⣴⣲⠙⣿⠻⣦⡻⣿⠈⡯⢓⡟⠁⠀
-⠀⠀⠀⠈⢸⣉⣿⣽⣿⢭⣤⠀⢠⡠⠀⠀⠀⢭⠁⠀⡀⢠⡠⣄⢘⢻⡌⣿⢀⢠⡔⡇⢹⣇⢸⡇⣧⢹⣪⣹⠃⠹⣿⢻⠕⡇⠁⠀⠀⠀
-⠀⠀⠀⠀⢸⣩⣷⢿⠤⠀⡿⣦⢹⡇⣀⡀⡄⣾⠘⣹⢸⣸⡏⣿⢨⢠⢻⣿⢠⣾⡇⣧⠸⡘⠾⠃⠁⠀⠁⠀⠈⠀⣿⢿⣟⡇⠀⠀⠀⠀
-⠀⠀⠀⠀⠸⣀⣿⠾⣇⠀⠇⢿⢸⠇⣁⣿⡇⣷⢹⣸⡸⠇⠁⠉⢸⠸⠇⠏⠀⠁⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⡿⢿⠰⡆⠀⠀⠀⠀
-⠀⠀⠀⠀⢸⢺⣻⠰⢿⢬⠱⠎⡼⠿⠗⠧⠙⠙⠂⠀⠀⠀⠀⠄⠛⠦⠀⠀⠀⠁⠈⠀⠀⠀⠁⠈⠀⠀⠀⠀⣠⡯⠞⢸⠛⡇⠀⠀⠀⠀
-⠀⠀⠀⠀⢸⠨⢽⠣⠤⢟⢤⠂⠠⠖⣿⠀⠸⡇⡾⡠⢿⢾⠑⡇⢸⠱⡩⢾⢅⠀⡴⣌⢤⣇⡄⢺⠛⠖⠈⣹⢫⡽⣼⣟⢒⡇⠀⠀⠀⠀
-⠀⠀⠀⠀⢸⣉⣻⣶⣶⡉⢌⢗⡅⠁⡟⣇⠈⢉⣤⠄⡄⢠⠄⣰⠀⢄⢠⢠⣄⣠⣠⠠⡉⠀⣠⢻⡀⢀⣼⢣⣻⠿⢻⣟⡛⡇⠀⠀⠀⠀
-⠀⠀⠀⠀⢈⢧⣽⡺⡘⣿⠎⣪⢺⡾⡛⠈⠓⣄⠁⠃⠁⠈⠀⠉⠁⠀⠈⠈⠈⠀⠈⢁⣡⢾⡥⢜⣷⡻⡳⣿⡏⣷⣿⣗⣶⡇⠀⠀⠀⠀
-⠀⠀⠀⠀⠸⠦⢼⣷⣕⣾⣁⣂⢡⡹⣿⡳⢤⡨⠔⢶⣄⣀⣀⣀⡀⣀⢀⢀⣀⣠⣖⠋⢀⣄⠲⢷⢎⣕⣼⣽⣮⣿⣟⡗⣂⡇⠀⠀⠀⠀
-⠀⠀⠀⠀⠠⣿⣻⡽⠺⣉⣃⣬⡦⣵⠘⢹⡻⣗⡟⠉⢐⣈⣉⣉⣿⣿⣿⣉⣑⣨⡽⢏⡟⢯⡋⠃⢮⠶⣡⣀⠹⠱⢮⣷⠴⡃⠀⠀⠀⠀
-⠀⠀⠀⠀⣸⡠⣾⣵⣶⣻⣻⠷⠾⣆⣶⣿⠵⠞⠚⢛⡭⢝⣛⣂⣈⣡⣉⣒⡶⠿⣉⣙⢻⠺⢽⡲⣦⠿⠶⠿⡽⣶⣦⣿⣭⢳⠀⠀⠀⠀
-⠀⠀⠀⣴⣹⣢⣬⣿⣿⣿⣿⣿⣯⣉⣨⣽⣿⣮⡝⢡⣾⣿⣟⣿⣿⡿⣿⣿⣿⢵⠄⠱⣭⣽⣭⣿⣿⣿⣿⣿⣿⣿⣯⣤⣼⣷⣷⠄⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠋⠿⣿⣿⣿⣿⣿⣿⡿⠟⠣⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-        """
-        # TODO: Add robe-fitting scene
-def flourish_blotts():
-        slow_print("You make your way toward a towering bookstore. \"Flourish & Blotts,\" Hagrid reads. \"You'll need yer books.\"\n")
-        flourish_blotts_art = [
+    text("'Hold out your arm. Which is your wand arm?'")
+    text("(Let's assume it's the right).")
+    text("\n'Now... tell me.'")
+
+    # Quiz - simplified
+    print("\nWhat is your eye color?")
+    eyes = tables["eyes"]
+    eyes_list = [e for e in eyes if e.lower() != "other"] + (["Other"] if "Other" in eyes else [])
+    
+    for i, e in enumerate(eyes_list, 1):
+        print(f"{i}) {e}")
+    
+    while True:
+        ch = get_key()
+        if ch.isdigit() and 1 <= int(ch) <= len(eyes_list):
+            eye = eyes_list[int(ch)-1]
+            break
+    cls()
+
+    print("What trait do you value most?")
+    traits = tables["traits"]
+    for i, t in enumerate(traits, 1):
+        print(f"{i}) {t}")
+    
+    while True:
+        ch = get_key()
+        if ch.isdigit() and 1 <= int(ch) <= len(traits):
+            trait = traits[int(ch)-1]
+            break
+    cls()
+
+    print("Where does your mind go when it wanders?")
+    paths = ["The Sea", "The Forest", "The Castle"]
+    for i, p in enumerate(paths, 1):
+        print(f"{i}) {p}")
+    
+    while True:
+        ch = get_key()
+        if ch in ["1","2","3"]:
+            path = paths[int(ch)-1]
+            break
+    cls()
+
+    print("Pick an object from the shelf:")
+    artefacts = tables["artefacts"]
+    # Reorder just for display cleanliness
+    top_picks = ["dusty bottle","old black glove","golden key","bound-up scroll","glittering jewel","silver dagger","ornate mirror"]
+    display_arts = [a for a in top_picks if a in artefacts] + [a for a in artefacts if a not in top_picks]
+
+    for i, a in enumerate(display_arts, 1):
+        print(f"{i}) {a}")
+    
+    while True:
+        ch = get_key()
+        if ch.isdigit() and 1 <= int(ch) <= len(display_arts):
+            artefact = display_arts[int(ch)-1]
+            break
+    cls()
+
+    print("What are you afraid of?")
+    fears = ["Darkness", "Fire", "Heights", "Tight Spaces", "Isolation"]
+    for i, f in enumerate(fears, 1):
+        print(f"{i}) {f}")
+    
+    while True:
+        ch = get_key()
+        if ch in ["1","2","3","4","5"]:
+            fear_index = int(ch)-1
+            break
+    cls()
+
+    print("How tall are you?")
+    heights = [("Short", "short"), ("Average", "average"), ("Tall", "tall")]
+    for i, (label, _) in enumerate(heights, 1):
+        print(f"{i}) {label}")
+    
+    while True:
+        ch = get_key()
+        if ch in ["1","2","3"]:
+            height_cat = heights[int(ch)-1][1]
+            break
+    cls()
+
+    print("Date of birth - Even or Odd day?")
+    print("1) Even")
+    print("2) Odd")
+    while True:
+        ch = get_key()
+        if ch == "1":
+            parity = "even"
+            break
+        if ch == "2":
+            parity = "odd"
+            break
+    cls()
+
+    # Calculate
+    answers = {
+        "eye": eye, "trait": trait, "path": path, 
+        "artefact": artefact, "fear_index": fear_index, 
+        "height_cat": height_cat, "parity": parity
+    }
+    wand = compute_wand(answers, tables)
+
+    # Result
+    text("Ollivander disappears into the back.")
+    text("He tries a few wands on you. 'No, no, definitely not that one.'")
+    text("Finally, he hands you a plain box.")
+    
+    text(f"\n'{wand['wood']}. {wand['length']}. {wand['core']} core.'")
+    text("'Give it a wave.'")
+
+    input("\nPress [ENTER] to wave wand... ")
+    cls()
+
+    text("A stream of gold sparks shoots from the end.")
+    text("The shop lights up. It feels warm in your hand.")
+    text("\nOllivander claps quietly.")
+    text(f"'Curious... {wand['flexibility']}. Very curious.'")
+    text("'The wand chooses the wizard, remember that.'")
+
+    global player_wand
+    player_wand = wand
+
+    input("\nPress [ENTER] to leave... ")
+    cls()
+
+def run_gringotts():
+    cls()
+    text("You approach a snowy white building that towers over the little shops.")
+    text("A goblin in a scarlet and gold uniform bows as you walk in.\n")
+    time.sleep(0.5)
+
+    gringotts_art = [
+        "⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⠶⠶⠟⠛⠛⠛⠛⠻⠶⠶⣤⣄⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⣠⡴⠛⣋⠄⢒⠫⠁⠰⡀⠐⡄⠈⡉⠒⠠⢙⠛⣶⣀⡀⠀⠀⠀⠀",
+        "⠀⠀⠀⣠⡾⢋⠅⢈⢠⠀⠀⣎⠴⠂⠡⠀⠉⠠⢹⠀⠀⡠⢨⠢⠙⢷⡄⠀⠀⠀",
+        "⠀⠀⣴⠛⠠⢂⠢⡀⠩⠔⠀⠀⠀⢀⣀⡀⠀⡄⠀⠀⠈⠔⢁⣜⠨⢂⠙⣧⠀⠀",
+        "⠀⣼⠋⠴⢑⡀⠁⠆⠁⣀⠔⡚⠉⠍⠉⢉⠙⠻⣆⠀⠀⠀⠁⠀⢀⣾⠀⠘⣷⠀",
+        "⢸⡇⠀⣅⡁⠈⠑⢀⠜⠥⠄⢉⠈⠀⠀⠀⠑⠀⠘⣷⡄⠀⠀⠀⠀⠈⠆⠀⢸⡇",
+        "⣿⠁⠀⡙⠁⠀⠉⣶⠒⠢⡈⢱⡄⠀⠀⠀⠒⠐⠂⠀⡈⠭⣐⡀⠀⢀⣧⣀⠈⣷",
+        "⣿⠀⠀⢀⠀⠀⠀⣿⡀⠀⢠⡀⠋⠐⠀⠀⢀⡀⠀⠉⢌⠁⠀⠀⠀⠈⠘⠀⠀⣿",
+        "⣿⡀⠀⠺⠓⠀⠀⢻⣟⣦⣀⠙⠉⠋⠀⢸⡿⠉⢻⣿⠋⠀⠀⠀⡐⢀⡤⢄⢀⡿",
+        "⠸⣇⠀⠀⣁⡠⠄⠀⢻⣿⢷⣄⡈⠘⠀⠀⠉⠀⣸⣿⡀⠀⠀⠠⢐⠋⠄⠜⢸⠇",
+        "⠀⢿⣄⠘⣁⠄⠀⠀⡀⠙⠻⠯⣷⣦⣤⣤⡶⠞⢡⠿⠧⠄⡀⢋⠲⢄⡀⢠⡿⠀",
+        "⠀⠀⠻⣤⠀⠀⡤⢫⡸⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠠⡐⢌⠀⠀⠀⣡⡟⠀⠀",
+        "⠀⠀⠀⠙⢷⣌⠀⠊⠀⢰⠃⠀⢶⠀⠂⡀⠒⠄⢸⠀⢣⠀⠈⠱⣠⡾⠏⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠙⠿⣤⣀⠃⠀⠀⠀⡞⠀⢣⠐⡆⠀⠣⠔⣁⣤⠾⠋⠀⠀⠀⠀ ",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠙⠛⠶⠶⣦⣤⣤⣤⣥⣴⠶⠞⠛⠋⠀⠀⠀⠀⠀⠀⠀⠀"
+    ]
+    center_print(gringotts_art)
+
+    text("\nThe Head Goblin looks over his wire-rimmed glasses.")
+    text("'And does the young witch or wizard have their vault key?'")
+
+    input("\nPress [ENTER]... ")
+    cls()
+
+    text("Hagrid begins rifling through his enormous pockets.")
+    text("Dog biscuits... moldy sausages... a half-knitted tea cozy...")
+    time.sleep(1)
+    text("\n'Aha! Here yeh go,' he says, triumphantly holding up a small bronze key.")
+    text("'This'll get yeh into yer vault.'")
+
+    input("\nPress [ENTER]... ")
+    cls()
+
+    text("A goblin named Griphook leads you to a rattling cart.")
+    text("You climb in beside Hagrid. The cart jerks forward with alarming speed.")
+
+    width = shutil.get_terminal_size().columns
+
+    ride_frames = [
+        "[  CART  ]  >> ------------------",
+        "----- [  CART  ]  >> ------------",
+        "--------- [  CART  ]  >> --------",
+        "------------- [  CART  ]  >> ----",
+        "----------------- [  CART  ]  >> ",
+    ]
+
+    for f in ride_frames:
+        cls()
+        print(f.center(width))
+        time.sleep(0.15)
+
+    text("\nThe wind stings your face as you descend deeper into the tunnels.")
+    text("The cart slows to a halt at the first stop.\n")
+
+    input("Press [ENTER] to open your vault... ")
+    cls()
+
+    # ——— PLAYER VAULT (GETTING RICHES) ———
+    text("Vault 129.")
+    text("Griphook unlocks the door. A plume of cool air rushes out.\n")
+
+    galleons = random.randint(80, 160)
+    sickles = random.randint(20, 60)
+    knuts = random.randint(20, 99)
+
+    text("Inside, piles of coins shimmer in the torchlight.")
+    time.sleep(0.5)
+    coins_art = [
+        "⠀⠀⠀⠀⠀⠀⠀⢀⡀⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⡎⠼⢠⠀⠀⠈⠂⠀⠀⡠⠐⠂⠁⠐⢄⡀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⢰⣧⣚⠐⠙⢀⣄⡶⠀⠰⡀⠆⣳⣉⠍⠀⣴⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⢨⣿⣿⣿⣿⣿⣿⣷⣦⣄⣿⣶⣶⣶⣿⡿⣿⣇⠀⠀",
+        "⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣟⣽⣿⢿⣿⣿⣿⣿⣿⣿⡏⠀⠀",
+        "⠀⠀⠀⠀⡖⡹⣿⣿⣿⣿⣾⣽⣿⣯⣻⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀",
+        "⠀⠀⠀⢰⣿⢦⣼⣿⣿⣟⣻⣿⣿⣷⣿⣽⣿⣿⠟⢛⠟⣻⡇⠀⠀",
+        "⠀⠀⣀⣸⣯⣿⣿⣿⣿⣿⣿⣯⠾⠿⠿⣿⣿⡷⠶⢤⠕⠺⠰⣺⡄",
+        "⠀⣾⢽⣷⠟⣻⣿⣿⣿⣿⣿⣿⠿⠿⠾⡿⣿⣿⣥⣁⣄⣤⣴⣯⣿",
+        "⢠⣿⣧⠿⣷⡿⠉⠻⣿⡿⣿⣿⣿⣶⣶⣾⣿⣿⣿⣿⣿⣿⢿⣿⣿",
+        "⠈⣿⣾⣿⣿⣿⣢⣻⣞⣉⣽⣿⣿⡾⢿⢿⣿⣿⣿⣿⣿⢿⣿⡿⣿",
+        "⠀⣿⢿⣿⣿⣿⣿⣫⡷⢿⣿⣿⣯⣗⣛⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿",
+        "⠀⣟⣛⠿⢟⣿⣿⣿⣭⣿⣿⣿⣿⣿⠛⣿⣿⣿⣿⣿⣿⣿⣽⣿⣿",
+        "⠀⢸⣟⡚⣺⣿⣿⡻⠭⣭⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣟⣻⣿⣿",
+        "⠀⢸⣿⣗⣍⣿⣿⣿⣷⣚⣿⣿⣿⡿⠛⣷⣿⠍⣿⣿⣷⣿⣷⣾⣿",
+        "⠀⠀⠉⠙⠛⠉⢿⣮⠽⠯⢿⡿⢿⣍⣭⣴⠟⠀⠈⠻⢿⣽⣾⡿⠟",
+        "⠀⠀⠀⠀⠀⠀⠀⠉⠛⠓⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+    ]
+    center_print(coins_art)
+    text(f"You collect: {galleons} Galleons, {sickles} Sickles, {knuts} Knuts.\n")
+
+    global player_money
+    player_money = {"g": galleons, "s": sickles, "k": knuts}
+
+    text("'Right then,' Hagrid says. 'Now we’ve got one more stop.'")
+    text("'Vault 713. Hogwarts business. Top secret.'")
+
+    input("\nPress [ENTER] to continue deeper... ")
+    cls()
+
+    # ——— MYSTERIOUS 713 ———
+    ride_frames_2 = [
+        "------------------ << [  CART  ]",
+        "------------ << [  CART  ] -----",
+        "-------- << [  CART  ] ---------",
+        "---- << [  CART  ] -------------",
+        " << [  CART  ] -----------------",
+    ]
+
+    for f in ride_frames_2:
+        cls()
+        print(f.center(width))
+        time.sleep(0.15)
+
+    text("\nThe air grows colder. The tunnel walls tighten around you.")
+    text("The cart stops in front of a massive, darkened vault door.\n")
+
+    text("Vault 713.")
+    text("The number glows faintly — like it's alive.\n")
+    text("You feel a pull in your chest. The vault is… calling to you.\n")
+
+    input("Press [ENTER]... ")
+    cls()
+
+    text("Griphook stiffens.")
+    text("'No customer has business with Vault 713,' he says sharply.")
+    text("'It is among the most heavily protected vaults in Gringotts.'\n")
+
+    text("Hagrid clears his throat nervously.")
+    text("'Er — best not get too interested. Hogwarts business.'\n")
+
+    question = input("You can't help yourself. What do you ask Hagrid about Vault 713? > ")
+
+    cls()
+    text(f"You ask: \"{question}\"")
+    text("\nHagrid nearly chokes on his own spit.")
+    text("'Now now — no need t' worry yerself about THAT,' he says quickly.")
+    text("But he doesn't look convinced by his own words.\n")
+
+    input("Press [ENTER] to return to the surface... ")
+    cls()
+
+def run_malkins():
+    text("Madam Malkin's Robes for All Occasions.")
+    madam_malkins_art = [
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣠⣤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠔⠚⠉⢡⡞⣹⣯⣻⡌⠉⠓⠢⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠎⠀⠀⠀⣀⣈⣫⣽⣿⣝⣁⠀⠀⠀⠀⠙⢆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣰⠇⠀⠠⣾⣿⣻⡯⢩⣿⣿⣩⣵⢾⣽⣗⠄⠀⠘⣇⣀⡀⠀⠀⠀⠀⠀⠀⠀⡠⠀⠀⠀⠀⠀",
+        "⠀⠀⣠⣴⣒⣒⣳⣦⣄⣀⣀⣀⣀⣘⣢⣿⣧⣀⡐⣛⣡⣾⢇⡿⣾⣻⢾⡘⣧⣭⣙⣋⣀⣼⣻⣔⣃⣀⣀⣀⣀⣠⣴⣞⣓⣒⣦⣄⠀⠀",
+        "⢀⡎⢉⣹⡯⣉⡉⠛⢻⣿⣿⣿⣿⣿⠿⠧⠖⢺⢿⣿⠿⣿⠟⠁⡽⣿⠭⠷⠾⢛⣽⣻⢿⠒⢻⠿⢿⣯⣭⣉⣛⠛⠛⠉⠛⢻⢏⡉⢱⡀",
+        "⠘⣇⠫⠌⣻⠇⢲⣶⣽⠭⣋⣸⣥⡾⠶⠞⠒⠉⠁⠀⠀⠈⠀⡈⢡⠎⠉⠀⠀⠀⠐⠒⠋⠛⢚⠓⠶⠦⡽⣈⠩⣿⣶⡀⢜⣞⠡⠹⢸⠇",
+        "⠀⠈⢳⡚⠿⠤⣿⣯⣧⣺⢋⣉⠉⣁⠀⠈⠀⠀⠀⠉⠀⠀⢠⣽⢯⡆⠀⣤⠂⠀⢠⡄⣶⢁⣘⡄⣴⣲⠙⣿⠻⣦⡻⣿⠈⡯⢓⡟⠁⠀",
+        "⠀⠀⠀⠈⢸⣉⣿⣽⣿⢭⣤⠀⢠⡠⠀⠀⠀⢭⠁⠀⡀⢠⡠⣄⢘⢻⡌⣿⢀⢠⡔⡇⢹⣇⢸⡇⣧⢹⣪⣹⠃⠹⣿⢻⠕⡇⠁⠀⠀⠀",
+        "⠀⠀⠀⠀⢸⣩⣷⢿⠤⠀⡿⣦⢹⡇⣀⡀⡄⣾⠘⣹⢸⣸⡏⣿⢨⢠⢻⣿⢠⣾⡇⣧⠸⡘⠾⠃⠁⠀⠁⠀⠈⠀⣿⢿⣟⡇⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠸⣀⣿⠾⣇⠀⠇⢿⢸⠇⣁⣿⡇⣷⢹⣸⡸⠇⠁⠉⢸⠸⠇⠏⠀⠁⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⡿⢿⠰⡆⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⢸⢺⣻⠰⢿⢬⠱⠎⡼⠿⠗⠧⠙⠙⠂⠀⠀⠀⠀⠄⠛⠦⠀⠀⠀⠁⠈⠀⠀⠀⠁⠈⠀⠀⠀⠀⣠⡯⠞⢸⠛⡇⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⢸⠨⢽⠣⠤⢟⢤⠂⠠⠖⣿⠀⠸⡇⡾⡠⢿⢾⠑⡇⢸⠱⡩⢾⢅⠀⡴⣌⢤⣇⡄⢺⠛⠖⠈⣹⢫⡽⣼⣟⢒⡇⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⢸⣉⣻⣶⣶⡉⢌⢗⡅⠁⡟⣇⠈⢉⣤⠄⡄⢠⠄⣰⠀⢄⢠⢠⣄⣠⣠⠠⡉⠀⣠⢻⡀⢀⣼⢣⣻⠿⢻⣟⡛⡇⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⢈⢧⣽⡺⡘⣿⠎⣪⢺⡾⡛⠈⠓⣄⠁⠃⠁⠈⠀⠉⠁⠀⠈⠈⠈⠀⠈⢁⣡⢾⡥⢜⣷⡻⡳⣿⡏⣷⣿⣗⣶⡇⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠸⠦⢼⣷⣕⣾⣁⣂⢡⡹⣿⡳⢤⡨⠔⢶⣄⣀⣀⣀⡀⣀⢀⢀⣀⣠⣖⠋⢀⣄⠲⢷⢎⣕⣼⣽⣮⣿⣟⡗⣂⡇⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⠠⣿⣻⡽⠺⣉⣃⣬⡦⣵⠘⢹⡻⣗⡟⠉⢐⣈⣉⣉⣿⣿⣿⣉⣑⣨⡽⢏⡟⢯⡋⠃⢮⠶⣡⣀⠹⠱⢮⣷⠴⡃⠀⠀⠀⠀",
+        "⠀⠀⠀⠀⣸⡠⣾⣵⣶⣻⣻⠷⠾⣆⣶⣿⠵⠞⠚⢛⡭⢝⣛⣂⣈⣡⣉⣒⡶⠿⣉⣙⢻⠺⢽⡲⣦⠿⠶⠿⡽⣶⣦⣿⣭⢳⠀⠀⠀⠀",
+        "⠀⠀⠀⣴⣹⣢⣬⣿⣿⣿⣿⣿⣯⣉⣨⣽⣿⣮⡝⢡⣾⣿⣟⣿⣿⡿⣿⣿⣿⢵⠄⠱⣭⣽⣭⣿⣿⣿⣿⣿⣿⣿⣯⣤⣼⣷⣷⠄⠀⠀",
+        "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠋⠿⣿⣿⣿⣿⣿⣿⡿⠟⠣⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+    ]
+    center_print(madam_malkins_art)
+    text("\nA squat witch measures you up.")
+    text("In the back, a pale boy is getting fitted.")
+    text("'Hogwarts too?' he asks. 'Father's buying my books.'")
+    text("He smirks. You decide you don't like him much.")
+    input("Press [ENTER]... ")
+
+def run_flourish():
+    text("Flourish & Blotts.")
+    flourish_blotts_art = [
              "⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
              "⠀⠀⠀⠀⠀⠀⠀⢀⡾⡩⠹⢒⡶⠦⣤⣤⣤⣤⣤⡤⠤⠶⣚⠫⠐⠐⠩⢛⠶⢤⣤⣀⣀⣀⣀⣠⣤⠴⠖⡛⡹⣆⠀⠀⠀⠀⠀⠀⠀⠀",
              "⠀⠀⠀⠀⢀⣠⠶⠫⠈⠀⠀⠀⠀⠈⠉⠀⠀⠀⠀⠀⠉⠀⠀⠀⠀⠀⠀⠀⠈⠁⠀⠒⠒⠒⠂⠀⠀⠉⠀⠀⠈⠨⠳⣄⡀⠀⠀⠀⠀⠀",
@@ -505,44 +619,219 @@ def flourish_blotts():
              "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⣎⡞⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
              "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
 
-        ]
-        for line in flourish_blotts_art:
-            slow_print(line.center(shutil.get_terminal_size().columns), 0.02)
-        # TODO: Add bookshop scene
+    ]
+    center_print(flourish_blotts_art)
+    text("\nShelves stacked to the ceiling with spellbooks.")
+    text("You buy your Standard Book of Spells.")
+    text("You almost buy 'Curses and Counter-Curses', but Hagrid drags you away.")
+    input("Press [ENTER]... ")
+
+places = []
+
 while True:
-    slow_print("""
-You stand at the entrance of Diagon Alley.
+    text("\nYou're standing in the middle of the street.")
+    text("Where do you want to go?")
+    print("1. Ollivanders (Wand)")
+    print("2. Gringotts (Bank)")
+    print("3. Madam Malkin's (Robes)")
+    print("4. Flourish & Blotts (Books)")
+    print("5. Follow Hagrid (Continue)")
 
-Where would you like to go first?
-
-    (1) Ollivanders — get your wand
-    (2) Gringotts — visit the wizard bank
-    (3) Madam Malkin's — school robes
-    (4) Flourish & Blotts — books
-    (5) Follow Hagrid — let him choose
-
-> """)
-    sel = getch()
-    clear()
+    sel = get_key()
+    cls()
 
     if sel == "1":
-        ollivanders()
-        break
-
+        if "ollivanders" in places:
+            text("You've already been to Ollivanders.")
+            continue
+        else:
+            run_ollivanders()
+            places.append("ollivanders")
     elif sel == "2":
-        gringotts()
-        break
-
+        if "gringotts" in places:
+            text("You've already been to Gringotts.")
+            continue
+        else:
+            run_gringotts()
+            places.append("gringotts")
     elif sel == "3":
-        madam_malkins()
-        break
+        if "malkins" in places:
+            text("You've already been to Madam Malkin's.")
+            continue
+        else:
+            run_malkins()
+            places.append("malkins")
     elif sel == "4":
-        flourish_blotts()
-        break
+        if "flourish" in places:
+            text("You've already been to Flourish & Blotts.")
+            continue
+        else:
+            run_flourish()
+            places.append("flourish")
     elif sel == "5":
-        slow_print("Hagrid chuckles. \"Right then, stick with me. I'll show yeh the important bits first.\"\n")
-        # TODO: Add guided tour sequence
+        text("'Right then,' says Hagrid. 'Time to get you a pet.'")
+        break
+    else:
+        text("Invalid choice.")
+
+import house_quiz
+import duel_engine
+
+cls()
+text("Eeylops Owl Emporium.")
+text("Hagrid says: Pick a pet. My treat.")
+
+pets = ["Snowy Owl", "Barn Owl", "Tawny Owl", "Black Cat", "Ginger Cat", "Toad"]
+for i, p in enumerate(pets, 1):
+    print(f"{i}. {p}")
+
+while True:
+    c = get_key()
+    if c in "123456":
+        pet = pets[int(c)-1]
         break
 
-    else:
-        slow_print("Please choose a valid option.\n")
+text(f"You got a {pet}.")
+input("Press ENTER...")
+
+cls()
+text("September 1st. King's Cross.")
+text("You run at the wall between platforms 9 and 10.")
+time.sleep(1)
+cls()
+text("Hogwarts Express.")
+text("You find a seat.")
+text("A redhead boy joins you. I'm Ron Weasley.")
+
+text("Trolley lady comes by.")
+print("1. Buy snacks")
+print("2. Don't")
+
+if get_key() == "1":
+    text("You buy everything. Ron is happy.")
+    player_money["g"] -= 2
+else:
+    text("You eat nothing.")
+
+text("Three boys enter.")
+text("It's Draco Malfoy.")
+text("Malfoy: You'll find some families are better than others.")
+print("1. Shake hand")
+print("2. Refuse")
+
+if get_key() == "1":
+    text("You shake hands. Ron looks mad.")
+else:
+    text("You refuse. Malfoy sneers.")
+
+input("Press ENTER to arrive...")
+
+cls()
+text("Hogsmeade Station.")
+text("Boats take you to the castle.")
+text("Great Hall.")
+text("Sorting Ceremony.")
+
+scores = {h: 0 for h in house_quiz.HOUSES}
+questions = house_quiz.choose_quiz_questions()
+
+for q in questions:
+    cls()
+    print(q["prompt"])
+    for i, opt in enumerate(q["options"], 1):
+        print(f"{i}) {opt['text']}")
+    
+    while True:
+        k = get_key()
+        if k.isdigit() and 1 <= int(k) <= len(q["options"]):
+            sel = q["options"][int(k)-1]
+            for h, v in sel["weights"].items():
+                scores[h] += v
+            break
+
+house = house_quiz.choose_house(scores)
+cls()
+text(f"Sorting Hat shouts: {house.upper()}!")
+input("Press ENTER...")
+
+spells = ["lumos", "nox"]
+times = ["Morning", "Afternoon", "Evening"]
+
+for t in times:
+    cls()
+    print(f"Time: {t}")
+    print("1. Charms (Flitwick)")
+    print("2. Potions (Snape)")
+    print("3. Defense Against Dark Arts (Quirrell)")
+    print("4. Explore")
+    
+    c = get_key()
+    cls()
+
+    if c == "1":
+        text("Charms.")
+        text("Flitwick: Swish and flick.")
+        print("1. Wingardium Leviosa")
+        print("2. Wingardium Leviosar")
+        if get_key() == "1":
+            text("Correct.")
+            if "wingardium leviosa" not in spells: spells.append("wingardium leviosa")
+        else:
+            text("Wrong.")
+
+    elif c == "2":
+        text("Potions.")
+        text("Snape: What does asphodel and wormwood make?")
+        print("1. Polyjuice")
+        print("2. Draught of Living Death")
+        if get_key() == "2":
+            text("Correct.")
+            if "aguamenti" not in spells: spells.append("aguamenti")
+        else:
+            text("Wrong. 5 points from Gryffindor.")
+
+    elif c == "3":
+        text("DADA.")
+        text("Quirrell: Deflect the hex!")
+        print("Press P now!")
+        s = time.time()
+        if get_key().lower() == 'p' and time.time() - s < 1:
+            text("Blocked.")
+            if "protego" not in spells: spells.append("protego")
+            if "stupefy" not in spells: spells.append("stupefy")
+        else:
+            text("Too slow.")
+            if "protego" not in spells: spells.append("protego")
+
+    elif c == "4":
+        text("You explore.")
+        text("Found a book.")
+        if "flipendo" not in spells: spells.append("flipendo")
+        if "sidestep" not in spells: spells.append("sidestep")
+
+cls()
+text("Midnight.")
+text("You hear voices.")
+text("Corvus Yaxley and the Carrow twins are there.")
+text("Yaxley: You have something we want.")
+input("DUEL START...")
+
+if "stupefy" not in spells and "flipendo" not in spells:
+    spells.append("flipendo")
+
+res = duel_engine.duel_prototype("Corvus Yaxley", spells)
+
+cls()
+if res == "lose":
+    text("Yaxley laughs.")
+    text("Avada Kedavra.")
+    print("YOU DIED")
+else:
+    text("Yaxley falls.")
+    text("But the Carrows are still standing.")
+    text("They cast Sectumsempra together.")
+    text("You can't block two spells.")
+    text("You fall.")
+    print("YOU DIED (But you won the duel)")
+
+input()
